@@ -1,0 +1,7 @@
+IONOS Deploy Now legt beim ersten Verbinden automatisch Workflow-Dateien unter .github/workflows/ an.
+
+Für diese statische Seite (reines HTML/CSS/JS):
+- Publish-Verzeichnis / DEPLOYMENT_FOLDER: ./
+- Kein Build-Befehl nötig
+
+Repository-Root = dieser Ordner (website).

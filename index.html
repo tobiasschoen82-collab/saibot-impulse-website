@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="sAIbot Impulse — Webseiten, KI-Lösungen und digitale Impulse. Artificial Intelligence Solutions aus einer Hand.">
+  <title>sAIbot Impulse · Artificial Intelligence Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/logo-dark.png" type="image/png">
+</head>
+<body>
+  <div id="intro" class="intro" aria-hidden="false">
+    <video id="intro-video" class="intro__video" playsinline muted autoplay preload="auto" poster="assets/logo-dark.png">
+      <source src="assets/logo-intro.mp4" type="video/mp4">
+    </video>
+    <div class="intro__veil"></div>
+    <button type="button" id="intro-skip" class="intro__skip">Überspringen</button>
+  </div>
+
+  <header class="site-header" id="top">
+    <div class="wrap site-header__inner">
+      <nav class="site-nav site-nav--left" aria-label="Navigation links">
+        <a href="#leistungen">Leistungen</a>
+        <a href="#projekte">Projekte</a>
+        <a href="#bausteine">Bausteine</a>
+      </nav>
+      <a class="brand brand--center" href="#top" aria-label="sAIbot Impulse Start">
+        <span class="brand__wordmark"><span class="brand-name">s<span class="brand-ai">AI</span>bot</span> Impulse</span>
+      </a>
+      <nav class="site-nav site-nav--right" aria-label="Navigation rechts">
+        <a href="#ueber-mich">Über mich</a>
+        <a href="#klarheit">Leistungsrahmen</a>
+        <a href="#kontakt" class="site-nav__cta">Kontakt</a>
+      </nav>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav-mobile">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
+        <a href="#leistungen">Leistungen</a>
+        <a href="#projekte">Projekte</a>
+        <a href="#bausteine">Bausteine</a>
+        <a href="#ueber-mich">Über mich</a>
+        <a href="#klarheit">Leistungsrahmen</a>
+        <a href="#kontakt" class="site-nav__cta">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="main" hidden>
+    <section class="hero" id="hero">
+      <div class="hero__stage" aria-hidden="true">
+        <div class="hero__parallax" id="hero-parallax">
+          <img src="assets/logo-dark.png" alt="" class="hero__parallax-img" width="1920" height="1080">
+        </div>
+        <div class="hero__spotlight-ring"></div>
+        <div class="hero__spotlight-beam"></div>
+        <div class="hero__veil"></div>
+      </div>
+      <div class="wrap hero__content reveal reveal--fade">
+        <p class="eyebrow reveal-text">Artificial Intelligence Solutions</p>
+        <h1 class="hero__title reveal-text">Digitale Impulse,<br><span class="gradient-text">die bleiben.</span></h1>
+        <p class="hero__lead reveal-text">
+          Ich entwickle edle Webauftritte, begleite Sie bei KI-Themen und setze eigene Produkte wie
+          <strong class="brand-inline">s<span class="brand-ai">AI</span>bot Impulse</strong> um — klar, modern und auf den Punkt.
+        </p>
+        <div class="hero__actions">
+          <a href="#kontakt" class="btn btn--primary">Projekt anfragen</a>
+          <a href="#projekte" class="btn btn--ghost">Referenzen ansehen</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="leistungen" class="section">
+      <div class="wrap">
+        <header class="section__head reveal reveal--from-left">
+          <p class="eyebrow reveal-text">Was ich für Sie tun kann</p>
+          <h2 class="reveal-text">Leistungen</h2>
+        </header>
+        <div class="cards cards--3">
+          <article class="card card--lift reveal reveal--from-left">
+            <div class="card__icon" aria-hidden="true">◇</div>
+            <h3 class="reveal-text">Webseiten für Unternehmen</h3>
+            <p>
+              Individuelle Sites von der Idee bis zur Übergabe — responsive, schnell und mit Blick auf
+              Ihre Zielgruppe. Ideal für Selbstständige, Vereine und KMU.
+            </p>
+          </article>
+          <article class="card card--lift reveal reveal--from-right">
+            <div class="card__icon" aria-hidden="true">◈</div>
+            <h3 class="reveal-text">KI-Begleitung &amp; Reparatur</h3>
+            <p>
+              Sie sind bei KI-Themen eingeladen oder stecken fest? Ich sortiere, erkläre und repariere
+              Workflows — praxisnah, ohne Buzzword-Bingo.
+            </p>
+          </article>
+          <article class="card card--lift reveal reveal--from-left">
+            <div class="card__icon" aria-hidden="true">◆</div>
+            <h3 class="reveal-text">Eigene Produkte</h3>
+            <p class="reveal-text">
+              Hinter <strong class="brand-inline">s<span class="brand-ai">AI</span>bot Impulse</strong> steckt meine To-Do- und Impuls-App — ein Beispiel,
+              wie ich digitale Tools denke und umsetze.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projekte" class="section section--alt">
+      <div class="wrap">
+        <header class="section__head reveal reveal--from-right">
+          <p class="eyebrow reveal-text">Aus meiner Werkstatt</p>
+          <h2 class="reveal-text">Projekte &amp; Referenzen</h2>
+          <p class="section__sub reveal-text">
+            Eigenes Produkt plus ausgewählte Kundenauftritte — Platzhalter können Sie jederzeit durch echte URLs ersetzen.
+          </p>
+        </header>
+        <div class="showcase">
+          <article class="showcase__featured reveal reveal--from-left">
+            <div class="showcase__badge">Eigenes Produkt</div>
+            <h3 class="reveal-text">s<span class="brand-ai">AI</span>bot Impulse</h3>
+            <p class="showcase__tagline">To-Do-App mit Fokus auf Impulse statt Listen-Stress.</p>
+            <ul class="feature-list">
+              <li>Übersichtliche Aufgaben &amp; Prioritäten</li>
+              <li>Modernes, reduziertes Interface</li>
+              <li>Ideal für Vielbeschäftigte &amp; Kreative</li>
+            </ul>
+            <a href="#kontakt" class="btn btn--primary btn--sm">Early Access / Demo anfragen</a>
+          </article>
+          <div class="showcase__grid">
+            <article class="showcase__item reveal reveal--from-right">
+              <span class="showcase__label">Kundenwebseite</span>
+              <h3 class="reveal-text">Projekt Alpha</h3>
+              <p>Kompakte Unternehmensseite mit klarer Struktur und starker Startseite.</p>
+              <a href="#" class="text-link" data-placeholder-link>Beispiel öffnen →</a>
+            </article>
+            <article class="showcase__item reveal reveal--from-right">
+              <span class="showcase__label">Kundenwebseite</span>
+              <h3 class="reveal-text">Projekt Beta</h3>
+              <p>Landingpage mit Fokus auf Conversion und mobile Nutzer.</p>
+              <a href="#" class="text-link" data-placeholder-link>Beispiel öffnen →</a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bausteine" class="section">
+      <div class="wrap">
+        <header class="section__head reveal reveal--from-left">
+          <p class="eyebrow reveal-text">Inspiration für Ihre Site</p>
+          <h2 class="reveal-text">Bausteine &amp; Stile</h2>
+          <p class="section__sub reveal-text">
+            So könnte Ihre Seite aussehen — modulare Elemente, die wir kombinieren.
+          </p>
+        </header>
+        <div class="blocks">
+          <div class="block-preview block-preview--hero reveal reveal--from-left"><span class="reveal-text">Hero mit Claim</span></div>
+          <div class="block-preview block-preview--split reveal reveal--from-right"><span class="reveal-text">Text + Bild</span></div>
+          <div class="block-preview block-preview--cards reveal reveal--from-left"><span class="reveal-text">Leistungs-Karten</span></div>
+          <div class="block-preview block-preview--cta reveal reveal--from-right"><span class="reveal-text">Kontakt-Call-to-Action</span></div>
+          <div class="block-preview block-preview--gallery reveal reveal--from-left"><span class="reveal-text">Referenz-Galerie</span></div>
+          <div class="block-preview block-preview--faq reveal reveal--from-right"><span class="reveal-text">FAQ &amp; Vertrauen</span></div>
+        </div>
+        <p class="blocks__note">
+          Im Gespräch wählen wir gemeinsam die Bausteine — passend zu Budget, Branche und Ihrem Auftritt.
+        </p>
+      </div>
+    </section>
+
+    <section id="ueber-mich" class="section section--alt">
+      <div class="wrap about">
+        <div class="about__visual reveal reveal--from-left">
+          <img src="assets/hero-texture.png" alt="sAIbot Impulse Branding" loading="lazy" width="600" height="400">
+        </div>
+        <div class="about__text reveal reveal--from-right">
+          <p class="eyebrow reveal-text">Über mich</p>
+          <h2 class="reveal-text">Wer hinter s<span class="brand-ai">AI</span>bot Impulse steht</h2>
+          <p class="reveal-text">
+            Ich verbinde Gestaltung, Technik und künstliche Intelligenz zu Lösungen, die im Alltag funktionieren.
+            Ob erste Webseite für Ihr Geschäft, ein Refresh Ihres Auftritts oder KI-Unterstützung bei konkreten
+            Fragen — ich arbeite direkt, transparent und ohne unnötige Komplexität.
+          </p>
+          <p class="reveal-text">
+            <strong>saibot-impulse.de</strong> ist meine Visitenkarte: hier sehen Sie Stil, Qualität und
+            wie ich Projekte denke. Lassen Sie uns darüber sprechen, was Sie brauchen.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="klarheit" class="section">
+      <div class="wrap">
+        <header class="section__head reveal reveal--from-left">
+          <p class="eyebrow reveal-text">Fair &amp; transparent</p>
+          <h2 class="reveal-text">Leistungsrahmen — damit beide Seiten entspannt sind</h2>
+          <p class="section__sub reveal-text">
+            Verkaufen möchte ich natürlich — aber auf Augenhöhe. Das schafft Vertrauen und weniger Missverständnisse.
+          </p>
+        </header>
+        <div class="clarity">
+          <div class="clarity__col clarity__col--yes reveal reveal--from-left">
+            <h3 class="reveal-text">Das können Sie erwarten</h3>
+            <ul>
+              <li>Konzeption, Design und Umsetzung Ihrer Webseite im vereinbarten Umfang</li>
+              <li>Saubere Übergabe der Dateien bzw. Zugänge nach Projektabschluss</li>
+              <li>KI-Beratung: Einordnung, Workflows verbessern, „kaputte“ Prozesse reparieren</li>
+              <li>Klare Absprachen zu Terminen, Inhalten und Ihren Mitwirkungspflichten</li>
+            </ul>
+          </div>
+          <div class="clarity__col clarity__col--no reveal reveal--from-right">
+            <h3 class="reveal-text">Darin bin ich (noch) nicht Ihr Ansprechpartner</h3>
+            <ul>
+              <li>
+                <strong>Keine Rechts- oder Datenschutzberatung:</strong> Ich bin kein Anwalt und kein
+                zertifizierter Datenschutzbeauftragter. Rechtstexte (Impressum, Datenschutz) liefere ich
+                auf Wunsch als <em>Vorlage</em> — die finale Verantwortung liegt bei Ihnen bzw. Ihrer Beratung.
+              </li>
+              <li>
+                <strong>Kein „100&nbsp;% sicher für immer“:</strong> Nach der Übergabe ohne Wartungsvertrag
+                übernehme ich keine Haftung für Ausfälle durch Hosting, Updates Dritter oder spätere Änderungen
+                durch andere Dienstleister.
+              </li>
+              <li>
+                <strong>Keine Garantie für externe Dienste:</strong> APIs, KI-Modelle und Plattformen unterliegen
+                ihren Anbietern — ich helfe bei Integration, kann deren Verfügbarkeit aber nicht garantieren.
+              </li>
+            </ul>
+            <p class="clarity__footer">
+              Optional buchbar: Wartung, Updates und kleine Anpassungen — dann bleiben wir auch nach dem Go-live
+              an Bord. Sprechen Sie mich einfach an.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="section section--contact">
+      <div class="wrap contact">
+        <header class="section__head section__head--center reveal reveal--fade">
+          <p class="eyebrow reveal-text">Los geht's</p>
+          <h2 class="reveal-text">Kontakt</h2>
+          <p class="section__sub reveal-text">Kurze Nachricht reicht — ich melde mich zeitnah.</p>
+        </header>
+        <div class="contact__grid">
+          <a class="contact__card reveal reveal--from-left" href="mailto:kontakt@saibot-impulse.de">
+            <span class="contact__label">E-Mail</span>
+            <span class="contact__value">kontakt@saibot-impulse.de</span>
+          </a>
+          <div class="contact__card contact__card--static reveal reveal--from-right">
+            <span class="contact__label">Domain</span>
+            <span class="contact__value">www.saibot-impulse.de</span>
+          </div>
+        </div>
+        <p class="contact__hint">
+          Tipp: Ersetzen Sie die E-Mail-Adresse oben durch Ihre echte IONOS-Postfach-Adresse, sobald Sie sie eingerichtet haben.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <img src="assets/logo-white.png" alt="" class="site-footer__logo" width="120" height="36" loading="lazy">
+      <nav class="site-footer__legal" aria-label="Rechtliches">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </nav>
+      <p class="site-footer__copy">© <span id="year"></span> sAIbot Impulse. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
