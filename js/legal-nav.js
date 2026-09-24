@@ -1,4 +1,13 @@
 (function () {
+  const headerVideo = document.getElementById("header-logo-video");
+  if (headerVideo) {
+    headerVideo.muted = true;
+    const playPromise = headerVideo.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+  }
+
   const navToggle = document.getElementById("nav-toggle");
   const siteNavMobile = document.getElementById("site-nav-mobile");
 

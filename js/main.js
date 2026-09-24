@@ -118,6 +118,11 @@
 
   function finishIntro() {
     if (!intro || intro.classList.contains("is-done")) return;
+    try {
+      sessionStorage.setItem("saibot-intro-done", "1");
+    } catch {
+      /* ignore */
+    }
     window.clearTimeout(introTimeoutId);
     intro.classList.add("is-done");
     intro.setAttribute("aria-hidden", "true");
@@ -173,6 +178,19 @@
 
     if (headerVideo) {
       headerVideo.pause();
+    }
+
+    let introAlreadySeen = false;
+    try {
+      introAlreadySeen = sessionStorage.getItem("saibot-intro-done") === "1";
+    } catch {
+      introAlreadySeen = false;
+    }
+
+    if (introAlreadySeen) {
+      header?.classList.remove("is-intro");
+      finishIntro();
+      return;
     }
 
     if (reducedMotion || !video) {

@@ -13,9 +13,11 @@
 </head>
 <body>
   <div id="intro" class="intro" aria-hidden="false">
-    <video id="intro-video" class="intro__video" playsinline muted autoplay preload="auto" poster="assets/logo-dark.png">
-      <source src="assets/logo-intro.mp4" type="video/mp4">
-    </video>
+    <div class="intro__stage">
+      <video id="intro-video" class="intro__video" playsinline muted autoplay preload="auto">
+        <source src="assets/logo-intro.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="intro__veil"></div>
     <button type="button" id="intro-play" class="intro__play" hidden>Intro abspielen</button>
     <button type="button" id="intro-sound" class="intro__sound" aria-pressed="false">Ton an</button>

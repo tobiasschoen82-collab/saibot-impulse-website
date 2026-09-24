@@ -11,19 +11,35 @@
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
 <body class="legal-body">
-  <header class="site-header site-header--legal is-scrolled" id="top">
+  <header class="site-header site-header--legal" id="top">
     <div class="site-header__bar">
-      <nav class="site-nav site-nav--left site-nav--legal" aria-label="Zurück">
-        <a class="site-nav__back" href="index.html">← Startseite</a>
+      <nav class="site-nav site-nav--left" aria-label="Navigation links">
+        <a href="index.html#leistungen">Leistungen</a>
+        <a href="index.html#projekte">Projekte</a>
+        <a href="index.html#bausteine">Bausteine</a>
       </nav>
       <a class="brand brand--center" href="index.html" aria-label="sAIbot Impulse Start">
-        <span class="brand__wordmark brand__wordmark--solo">
+        <video
+          id="header-logo-video"
+          class="brand__logo-video"
+          playsinline
+          muted
+          loop
+          preload="auto"
+          poster="assets/logo-dark.png"
+          width="240"
+          height="68"
+        >
+          <source src="assets/logo-intro.mp4" type="video/mp4">
+        </video>
+        <span class="brand__wordmark">
           <span class="brand__name-light">s<span class="brand-ai">AI</span>bot</span><span class="brand__impulse"> Impulse</span>
         </span>
       </a>
-      <nav class="site-nav site-nav--right site-nav--legal" aria-label="Rechtliches">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html" aria-current="page">Datenschutz</a>
+      <nav class="site-nav site-nav--right" aria-label="Navigation rechts">
+        <a href="index.html#ueber-mich">Über mich</a>
+        <a href="index.html#klarheit">Leistungsrahmen</a>
+        <a class="site-nav__cta" href="index.html">Zur Startseite</a>
       </nav>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav-mobile">
         <span></span><span></span><span></span>
@@ -31,9 +47,14 @@
     </div>
   </header>
   <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
-    <a href="index.html">← Startseite</a>
+    <a href="index.html">Startseite</a>
+    <a href="index.html#leistungen">Leistungen</a>
+    <a href="index.html#projekte">Projekte</a>
+    <a href="index.html#bausteine">Bausteine</a>
+    <a href="index.html#ueber-mich">Über mich</a>
+    <a href="index.html#klarheit">Leistungsrahmen</a>
     <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
+    <a href="datenschutz.html" aria-current="page">Datenschutz</a>
   </nav>
   <main class="legal-page">
     <div class="wrap">
