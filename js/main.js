@@ -17,9 +17,10 @@
   const scrollProgressFill = document.getElementById("scroll-progress-fill");
   const scrollKeywordEl = document.getElementById("scroll-progress-keyword");
   const evolutionScroll = document.getElementById("evolution-scroll");
-  const evolutionReel = document.getElementById("evolution-reel");
-  const flipbook = document.getElementById("flipbook");
+  const evolutionVideo = document.getElementById("evolution-video");
   const evolutionCaption = document.getElementById("evolution-caption");
+  const evolutionEra = document.getElementById("evolution-era");
+  let evolutionVideoDuration = 0;
   const heroStoryScroll = document.getElementById("hero-story-scroll");
   const heroStoryMega = document.getElementById("hero-story-mega");
   const heroStorySub = document.getElementById("hero-story-sub");
@@ -63,13 +64,31 @@
     { until: 1.01, mega: "", sub: "" },
   ];
 
-  const EVOLUTION_CAPTIONS = [
-    "Einzelbilder werden zur Bewegung — wie Ideen, die Schritt für Schritt reifen.",
-    "Die Filmrolle speichert Geschichten — Technik wird greifbar und teilbar.",
-    "Computer strukturieren Wissen — Programme übernehmen wiederholbare Arbeit.",
-    "Netzwerke verbinden Menschen und Maschinen weltweit.",
-    "Systeme lernen aus Daten — Muster werden sichtbar.",
-    "Künstliche Intelligenz wird Partner: passgenaue Software für Ihr Unternehmen.",
+  const EVOLUTION_ERAS = [
+    {
+      label: "Daumenkino",
+      text: "Einzelbilder werden zur Bewegung — wie Ideen, die Schritt für Schritt reifen.",
+    },
+    {
+      label: "Filmrolle",
+      text: "Die Filmrolle speichert Geschichten — Technik wird greifbar und teilbar.",
+    },
+    {
+      label: "Computer",
+      text: "Computer strukturieren Wissen — Programme übernehmen wiederholbare Arbeit.",
+    },
+    {
+      label: "Netz",
+      text: "Netzwerke verbinden Menschen und Maschinen weltweit.",
+    },
+    {
+      label: "Lernen",
+      text: "Systeme lernen aus Daten — Muster werden sichtbar.",
+    },
+    {
+      label: "Künstliche Intelligenz",
+      text: "Künstliche Intelligenz wird Partner: passgenaue Software für Ihr Unternehmen.",
+    },
   ];
 
   if (yearEl) {
@@ -387,26 +406,70 @@
     }
   }
 
-  function updateEvolutionScroll() {
-    if (!evolutionScroll || !evolutionReel || !flipbook) return;
-
+  function getEvolutionProgress() {
+    if (!evolutionScroll) return 0;
     const rect = evolutionScroll.getBoundingClientRect();
     const scrollable = evolutionScroll.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
-
+    if (scrollable <= 0) return 0;
     const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
-    const progress = traveled / scrollable;
-    const frameIndex = Math.min(5, Math.floor(progress * 6));
-    const reelTurns = progress * 720;
+    return traveled / scrollable;
+  }
 
-    evolutionReel.style.setProperty("--reel-rot", `${reelTurns}deg`);
+  function applyEvolutionProgress(progress) {
+    const clamped = Math.min(1, Math.max(0, progress));
+    const eraIndex = Math.min(
+      EVOLUTION_ERAS.length - 1,
+      Math.floor(clamped * EVOLUTION_ERAS.length)
+    );
+    const era = EVOLUTION_ERAS[eraIndex];
 
-    flipbook.querySelectorAll(".flipbook__frame").forEach((frame, index) => {
-      frame.classList.toggle("is-active", index === frameIndex);
-    });
+    if (evolutionEra && evolutionEra.textContent !== era.label) {
+      evolutionEra.textContent = era.label;
+    }
+    if (evolutionCaption && evolutionCaption.textContent !== era.text) {
+      evolutionCaption.textContent = era.text;
+    }
 
-    if (evolutionCaption && EVOLUTION_CAPTIONS[frameIndex]) {
-      evolutionCaption.textContent = EVOLUTION_CAPTIONS[frameIndex];
+    if (evolutionVideo && evolutionVideoDuration > 0) {
+      const targetTime = clamped * evolutionVideoDuration;
+      if (Math.abs(evolutionVideo.currentTime - targetTime) > 0.04) {
+        try {
+          evolutionVideo.currentTime = targetTime;
+        } catch {
+          /* seek while metadata loading */
+        }
+      }
+    }
+  }
+
+  function updateEvolutionScroll() {
+    if (!evolutionScroll) return;
+    applyEvolutionProgress(getEvolutionProgress());
+  }
+
+  function initEvolutionVideo() {
+    if (!evolutionVideo) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      evolutionVideo.pause();
+      applyEvolutionProgress(0);
+      return;
+    }
+
+    evolutionVideo.pause();
+    evolutionVideo.removeAttribute("controls");
+
+    const onReady = () => {
+      if (Number.isFinite(evolutionVideo.duration) && evolutionVideo.duration > 0) {
+        evolutionVideoDuration = evolutionVideo.duration;
+        updateEvolutionScroll();
+      }
+    };
+
+    evolutionVideo.addEventListener("loadedmetadata", onReady);
+    if (evolutionVideo.readyState >= 1) {
+      onReady();
     }
   }
 
@@ -884,6 +947,7 @@
     }
   }
 
+  initEvolutionVideo();
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();
