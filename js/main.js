@@ -22,7 +22,7 @@
   const evolutionEra = document.getElementById("evolution-era");
   let evolutionVideoDuration = 0;
   let evolutionVideoTarget = 0;
-  let evolutionVideoRaf = 0;
+  let evolutionVideoSyncRaf = 0;
   const heroStoryScroll = document.getElementById("hero-story-scroll");
   const heroStoryMega = document.getElementById("hero-story-mega");
   const heroStorySub = document.getElementById("hero-story-sub");
@@ -93,15 +93,6 @@
     { start: 0.84, end: 1.001, eraIndex: 3 },
   ];
 
-  /** Scroll → Videozeit (0–1): Netz/Lernen nur im Bild, am Ende kurz „halten“ */
-  const EVOLUTION_VIDEO_MAP = [
-    { scroll: 0, video: 0 },
-    { scroll: 0.3, video: 0.24 },
-    { scroll: 0.44, video: 0.4 },
-    { scroll: 0.84, video: 0.88 },
-    { scroll: 0.92, video: 0.96 },
-    { scroll: 1, video: 0.96 },
-  ];
 
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
@@ -427,18 +418,9 @@
     return traveled / scrollable;
   }
 
+  /** Scroll 0–1 → Video 0–1 (linear, damit Vor/Zurück ohne Sprünge mitläuft) */
   function mapScrollToVideoProgress(scrollProgress) {
-    const p = Math.min(1, Math.max(0, scrollProgress));
-    for (let i = 0; i < EVOLUTION_VIDEO_MAP.length - 1; i += 1) {
-      const a = EVOLUTION_VIDEO_MAP[i];
-      const b = EVOLUTION_VIDEO_MAP[i + 1];
-      if (p >= a.scroll && p <= b.scroll) {
-        const span = b.scroll - a.scroll || 1;
-        const t = (p - a.scroll) / span;
-        return a.video + (b.video - a.video) * t;
-      }
-    }
-    return EVOLUTION_VIDEO_MAP[EVOLUTION_VIDEO_MAP.length - 1].video;
+    return Math.min(1, Math.max(0, scrollProgress));
   }
 
   function getEvolutionEraIndex(scrollProgress) {
@@ -452,37 +434,33 @@
     return EVOLUTION_ERAS.length - 1;
   }
 
-  function tickEvolutionVideoSmooth() {
-    if (!evolutionVideo || evolutionVideoDuration <= 0) {
-      evolutionVideoRaf = 0;
-      return;
-    }
+  function syncEvolutionVideoToScroll() {
+    evolutionVideoSyncRaf = 0;
+    if (!evolutionVideo || evolutionVideoDuration <= 0) return;
 
     const targetTime = evolutionVideoTarget * evolutionVideoDuration;
     const current = evolutionVideo.currentTime;
-    const diff = targetTime - current;
+    if (Math.abs(current - targetTime) < 0.012) return;
 
-    if (Math.abs(diff) > 0.015) {
-      const step = diff * 0.22;
+    if (typeof evolutionVideo.fastSeek === "function") {
       try {
-        evolutionVideo.currentTime = current + step;
+        evolutionVideo.fastSeek(targetTime);
+        return;
       } catch {
-        /* ignore seek errors */
-      }
-    } else if (Math.abs(diff) > 0.002) {
-      try {
-        evolutionVideo.currentTime = targetTime;
-      } catch {
-        /* ignore */
+        /* fallback */
       }
     }
 
-    evolutionVideoRaf = window.requestAnimationFrame(tickEvolutionVideoSmooth);
+    try {
+      evolutionVideo.currentTime = targetTime;
+    } catch {
+      /* ignore seek errors (z. B. während Decoding) */
+    }
   }
 
-  function ensureEvolutionVideoLoop() {
-    if (!evolutionVideoRaf) {
-      evolutionVideoRaf = window.requestAnimationFrame(tickEvolutionVideoSmooth);
+  function requestEvolutionVideoSync() {
+    if (!evolutionVideoSyncRaf) {
+      evolutionVideoSyncRaf = window.requestAnimationFrame(syncEvolutionVideoToScroll);
     }
   }
 
@@ -498,7 +476,7 @@
     }
 
     evolutionVideoTarget = mapScrollToVideoProgress(clamped);
-    ensureEvolutionVideoLoop();
+    requestEvolutionVideoSync();
   }
 
   function updateEvolutionScroll() {
@@ -524,7 +502,7 @@
       if (Number.isFinite(evolutionVideo.duration) && evolutionVideo.duration > 0) {
         evolutionVideoDuration = evolutionVideo.duration;
         updateEvolutionScroll();
-        ensureEvolutionVideoLoop();
+        requestEvolutionVideoSync();
       }
     };
 
@@ -534,8 +512,8 @@
     }
 
     window.addEventListener("beforeunload", () => {
-      if (evolutionVideoRaf) {
-        window.cancelAnimationFrame(evolutionVideoRaf);
+      if (evolutionVideoSyncRaf) {
+        window.cancelAnimationFrame(evolutionVideoSyncRaf);
       }
     });
   }

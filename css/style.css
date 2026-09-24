@@ -2558,13 +2558,13 @@ h3.reveal-text.is-lit,
   }
 
   .hero__parallax {
-    inset: -6%;
+    inset: -3%;
   }
 
   .hero__parallax-img {
-    object-fit: cover;
+    object-fit: contain;
     object-position: center center;
-    transform: scale(1.12);
+    transform: none;
   }
 
   .hero__spotlight-ring,
@@ -2637,7 +2637,7 @@ h3.reveal-text.is-lit,
   }
 
   .klarheit-scroll {
-    height: 165vh;
+    height: 320vh;
   }
 
   .klarheit-earth {
@@ -2645,7 +2645,19 @@ h3.reveal-text.is-lit,
   }
 
   .klarheit-sticky {
-    padding: 1.75rem 0 2.5rem;
+    z-index: 2;
+    align-items: flex-start;
+    padding: 1.75rem 0 7.5rem;
+  }
+
+  .klarheit-stage .clarity__footer {
+    margin-bottom: 2rem;
+  }
+
+  .site-footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 0.5rem;
   }
 
   .klarheit-stage .section__head h2 {
