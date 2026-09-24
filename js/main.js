@@ -21,6 +21,8 @@
   const evolutionCaption = document.getElementById("evolution-caption");
   const evolutionEra = document.getElementById("evolution-era");
   let evolutionVideoDuration = 0;
+  let evolutionVideoTarget = 0;
+  let evolutionVideoRaf = 0;
   const heroStoryScroll = document.getElementById("hero-story-scroll");
   const heroStoryMega = document.getElementById("hero-story-mega");
   const heroStorySub = document.getElementById("hero-story-sub");
@@ -78,17 +80,27 @@
       text: "Computer strukturieren Wissen — Programme übernehmen wiederholbare Arbeit.",
     },
     {
-      label: "Netz",
-      text: "Netzwerke verbinden Menschen und Maschinen weltweit.",
-    },
-    {
-      label: "Lernen",
-      text: "Systeme lernen aus Daten — Muster werden sichtbar.",
-    },
-    {
       label: "Künstliche Intelligenz",
       text: "Künstliche Intelligenz wird Partner: passgenaue Software für Ihr Unternehmen.",
     },
+  ];
+
+  /** Scroll-Fortschritt 0–1 → sichtbare Epoche (längere Phasen für Daumenkino & Computer) */
+  const EVOLUTION_TEXT_BANDS = [
+    { start: 0, end: 0.3, eraIndex: 0 },
+    { start: 0.3, end: 0.44, eraIndex: 1 },
+    { start: 0.44, end: 0.84, eraIndex: 2 },
+    { start: 0.84, end: 1.001, eraIndex: 3 },
+  ];
+
+  /** Scroll → Videozeit (0–1): Netz/Lernen nur im Bild, am Ende kurz „halten“ */
+  const EVOLUTION_VIDEO_MAP = [
+    { scroll: 0, video: 0 },
+    { scroll: 0.3, video: 0.24 },
+    { scroll: 0.44, video: 0.4 },
+    { scroll: 0.84, video: 0.88 },
+    { scroll: 0.92, video: 0.96 },
+    { scroll: 1, video: 0.96 },
   ];
 
   if (yearEl) {
@@ -415,13 +427,68 @@
     return traveled / scrollable;
   }
 
+  function mapScrollToVideoProgress(scrollProgress) {
+    const p = Math.min(1, Math.max(0, scrollProgress));
+    for (let i = 0; i < EVOLUTION_VIDEO_MAP.length - 1; i += 1) {
+      const a = EVOLUTION_VIDEO_MAP[i];
+      const b = EVOLUTION_VIDEO_MAP[i + 1];
+      if (p >= a.scroll && p <= b.scroll) {
+        const span = b.scroll - a.scroll || 1;
+        const t = (p - a.scroll) / span;
+        return a.video + (b.video - a.video) * t;
+      }
+    }
+    return EVOLUTION_VIDEO_MAP[EVOLUTION_VIDEO_MAP.length - 1].video;
+  }
+
+  function getEvolutionEraIndex(scrollProgress) {
+    const p = Math.min(1, Math.max(0, scrollProgress));
+    for (let i = 0; i < EVOLUTION_TEXT_BANDS.length; i += 1) {
+      const band = EVOLUTION_TEXT_BANDS[i];
+      if (p >= band.start && p < band.end) {
+        return band.eraIndex;
+      }
+    }
+    return EVOLUTION_ERAS.length - 1;
+  }
+
+  function tickEvolutionVideoSmooth() {
+    if (!evolutionVideo || evolutionVideoDuration <= 0) {
+      evolutionVideoRaf = 0;
+      return;
+    }
+
+    const targetTime = evolutionVideoTarget * evolutionVideoDuration;
+    const current = evolutionVideo.currentTime;
+    const diff = targetTime - current;
+
+    if (Math.abs(diff) > 0.015) {
+      const step = diff * 0.22;
+      try {
+        evolutionVideo.currentTime = current + step;
+      } catch {
+        /* ignore seek errors */
+      }
+    } else if (Math.abs(diff) > 0.002) {
+      try {
+        evolutionVideo.currentTime = targetTime;
+      } catch {
+        /* ignore */
+      }
+    }
+
+    evolutionVideoRaf = window.requestAnimationFrame(tickEvolutionVideoSmooth);
+  }
+
+  function ensureEvolutionVideoLoop() {
+    if (!evolutionVideoRaf) {
+      evolutionVideoRaf = window.requestAnimationFrame(tickEvolutionVideoSmooth);
+    }
+  }
+
   function applyEvolutionProgress(progress) {
     const clamped = Math.min(1, Math.max(0, progress));
-    const eraIndex = Math.min(
-      EVOLUTION_ERAS.length - 1,
-      Math.floor(clamped * EVOLUTION_ERAS.length)
-    );
-    const era = EVOLUTION_ERAS[eraIndex];
+    const era = EVOLUTION_ERAS[getEvolutionEraIndex(clamped)];
 
     if (evolutionEra && evolutionEra.textContent !== era.label) {
       evolutionEra.textContent = era.label;
@@ -430,16 +497,8 @@
       evolutionCaption.textContent = era.text;
     }
 
-    if (evolutionVideo && evolutionVideoDuration > 0) {
-      const targetTime = clamped * evolutionVideoDuration;
-      if (Math.abs(evolutionVideo.currentTime - targetTime) > 0.04) {
-        try {
-          evolutionVideo.currentTime = targetTime;
-        } catch {
-          /* seek while metadata loading */
-        }
-      }
-    }
+    evolutionVideoTarget = mapScrollToVideoProgress(clamped);
+    ensureEvolutionVideoLoop();
   }
 
   function updateEvolutionScroll() {
@@ -459,11 +518,13 @@
 
     evolutionVideo.pause();
     evolutionVideo.removeAttribute("controls");
+    evolutionVideo.setAttribute("preload", "auto");
 
     const onReady = () => {
       if (Number.isFinite(evolutionVideo.duration) && evolutionVideo.duration > 0) {
         evolutionVideoDuration = evolutionVideo.duration;
         updateEvolutionScroll();
+        ensureEvolutionVideoLoop();
       }
     };
 
@@ -471,6 +532,12 @@
     if (evolutionVideo.readyState >= 1) {
       onReady();
     }
+
+    window.addEventListener("beforeunload", () => {
+      if (evolutionVideoRaf) {
+        window.cancelAnimationFrame(evolutionVideoRaf);
+      }
+    });
   }
 
   function updateScrollUi() {
