@@ -1063,7 +1063,7 @@ html:has(.intro:not(.is-done)) body {
   top: var(--keyword-top, 50%);
   transform: translateY(-50%) translateX(-8px);
   font-family: var(--font-display);
-  font-size: clamp(0.72rem, 1.1vw, 0.88rem);
+  font-size: clamp(0.82rem, 1.22vw, 0.98rem);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1078,7 +1078,8 @@ html:has(.intro:not(.is-done)) body {
   transition:
     opacity 0.55s var(--ease),
     transform 0.55s var(--ease),
-    top 0.35s var(--ease);
+    top 0.35s var(--ease),
+    font-size 0.45s var(--ease);
   pointer-events: none;
 }
 
@@ -1496,10 +1497,14 @@ html:has(.intro:not(.is-done)) body {
 
 .scroll-progress__keyword--welcome {
   text-transform: none;
-  letter-spacing: 0.04em;
-  font-size: clamp(0.62rem, 0.95vw, 0.78rem);
-  font-weight: 500;
-  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  font-size: clamp(1.2rem, 2.15vw, 1.65rem);
+  font-weight: 600;
+  font-family: var(--font-display);
+  line-height: 1.15;
+  max-width: 11rem;
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .flipbook__mini {
@@ -2873,14 +2878,21 @@ html:has(.intro:not(.is-done)) body {
   .scroll-progress__keyword {
     display: block;
     left: calc(100% + 0.28rem);
-    max-width: 4.25rem;
-    font-size: 0.56rem;
+    max-width: 4.5rem;
+    font-size: 0.62rem;
     letter-spacing: 0.07em;
     line-height: 1.22;
     white-space: normal;
     text-wrap: balance;
     overflow: visible;
     z-index: 91;
+  }
+
+  .scroll-progress__keyword--welcome {
+    max-width: 6.75rem;
+    font-size: clamp(0.92rem, 3.6vw, 1.15rem);
+    letter-spacing: 0.02em;
+    line-height: 1.12;
   }
 
   .ai-sparkles {
@@ -2960,8 +2972,13 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .scroll-progress__keyword {
-    max-width: 3.6rem;
-    font-size: 0.52rem;
+    max-width: 3.75rem;
+    font-size: 0.58rem;
+  }
+
+  .scroll-progress__keyword--welcome {
+    max-width: 6.2rem;
+    font-size: clamp(0.88rem, 4.2vw, 1.05rem);
   }
 
   .wrap {
