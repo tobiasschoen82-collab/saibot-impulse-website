@@ -45,31 +45,32 @@
 
   const HERO_STORY_BEATS = [
     { until: 0.1, mega: "", sub: "" },
-    { until: 0.24, mega: "KI · verständlich.", sub: "" },
-    { until: 0.34, mega: "KI · verständlich.", sub: "für KMU" },
-    { until: 0.44, mega: "Haltung", sub: "" },
+    { until: 0.22, mega: "KI · verständlich.", sub: "" },
+    { until: 0.42, mega: "KI · verständlich.", sub: "für KMU" },
+    { until: 0.5, mega: "Haltung", sub: "" },
     {
-      until: 0.54,
+      until: 0.6,
       mega: "Haltung",
       sub: "KI begeistert mich — Nähe entsteht im Team, am Tisch, nicht am Autopiloten.",
     },
-    { until: 0.64, mega: "Digitalisierung", sub: "" },
+    { until: 0.68, mega: "Digitalisierung", sub: "" },
     {
-      until: 0.74,
+      until: 0.76,
       mega: "Digitalisierung",
       sub: "Damit das persönliche Miteinander wieder in den Mittelpunkt rückt.",
     },
+    { until: 0.84, mega: "Der Mensch entscheidet", sub: "" },
     {
-      until: 0.84,
+      until: 0.92,
       mega: "Der Mensch entscheidet",
       sub: "Technik unterstützt — sie ersetzt kein Gespräch nebeneinander.",
     },
+    { until: 0.96, mega: "Impulse", sub: "" },
     {
-      until: 0.96,
+      until: 1.01,
       mega: "Impulse",
       sub: "Passgenaue Programme — und Zeit für echte Begegnungen.",
     },
-    { until: 1.01, mega: "", sub: "" },
   ];
 
   const EVOLUTION_ERAS = [
@@ -116,13 +117,20 @@
     }
   }
 
-  function finishIntro() {
-    if (!intro || intro.classList.contains("is-done")) return;
+  function shouldSkipIntroFromLegalReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("skipIntro") === "1") return true;
     try {
-      sessionStorage.setItem("saibot-intro-done", "1");
+      const ref = document.referrer || "";
+      if (/impressum\.html|datenschutz\.html/i.test(ref)) return true;
     } catch {
       /* ignore */
     }
+    return false;
+  }
+
+  function finishIntro() {
+    if (!intro || intro.classList.contains("is-done")) return;
     window.clearTimeout(introTimeoutId);
     intro.classList.add("is-done");
     intro.setAttribute("aria-hidden", "true");
@@ -180,14 +188,7 @@
       headerVideo.pause();
     }
 
-    let introAlreadySeen = false;
-    try {
-      introAlreadySeen = sessionStorage.getItem("saibot-intro-done") === "1";
-    } catch {
-      introAlreadySeen = false;
-    }
-
-    if (introAlreadySeen) {
+    if (shouldSkipIntroFromLegalReturn()) {
       header?.classList.remove("is-intro");
       finishIntro();
       return;
@@ -406,7 +407,7 @@
       openingPanel &&
       openingPanel.getBoundingClientRect().bottom > window.innerHeight * 0.45;
 
-    if (openingVisible && window.scrollY < 160) {
+    if (openingVisible && window.scrollY < 220) {
       setScrollKeyword(SCROLL_KEYWORD_WELCOME);
       return;
     }
@@ -647,8 +648,10 @@
     }
 
     const beat = resolveHeroStoryBeat(progress);
+    let megaChangedThisTick = false;
 
     if (heroStoryMega.dataset.line !== beat.mega) {
+      megaChangedThisTick = true;
       heroStoryMega.dataset.line = beat.mega;
       heroStoryMega.classList.remove("is-lit");
       heroStoryMega.textContent = beat.mega;
@@ -662,7 +665,12 @@
       heroStorySub.classList.remove("is-lit");
       heroStorySub.textContent = beat.sub;
       if (beat.sub) {
-        window.requestAnimationFrame(() => heroStorySub.classList.add("is-lit"));
+        const subDelayMs = megaChangedThisTick ? 520 : 80;
+        window.setTimeout(() => {
+          if (heroStorySub.dataset.line === beat.sub) {
+            heroStorySub.classList.add("is-lit");
+          }
+        }, subDelayMs);
       }
     }
   }

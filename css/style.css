@@ -230,7 +230,7 @@ h3.reveal-text.is-lit,
 
 /* Intro */
 .intro {
-  --intro-bg: #f3f1ed;
+  --intro-bg: #06080c;
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -267,7 +267,7 @@ h3.reveal-text.is-lit,
 
 html:has(.intro:not(.is-done)),
 html:has(.intro:not(.is-done)) body {
-  background: #f3f1ed;
+  background: #06080c;
 }
 
 .intro__veil {
@@ -1498,13 +1498,14 @@ html:has(.intro:not(.is-done)) body {
 .scroll-progress__keyword--welcome {
   text-transform: none;
   letter-spacing: 0.02em;
-  font-size: clamp(1.2rem, 2.15vw, 1.65rem);
+  font-size: clamp(1.35rem, 2.55vw, 1.9rem) !important;
   font-weight: 600;
   font-family: var(--font-display);
-  line-height: 1.15;
-  max-width: 11rem;
+  line-height: 1.12;
+  max-width: 12rem;
   white-space: normal;
   text-wrap: balance;
+  left: calc(100% + 0.85rem);
 }
 
 .flipbook__mini {
@@ -2889,10 +2890,11 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .scroll-progress__keyword--welcome {
-    max-width: 6.75rem;
-    font-size: clamp(0.92rem, 3.6vw, 1.15rem);
+    max-width: 7.25rem;
+    font-size: clamp(1rem, 4.2vw, 1.28rem) !important;
     letter-spacing: 0.02em;
     line-height: 1.12;
+    left: calc(100% + 0.35rem);
   }
 
   .ai-sparkles {
@@ -2938,7 +2940,7 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .intro__stage {
-    background: var(--intro-bg, #f3f1ed);
+    background: var(--intro-bg, #06080c);
   }
 
   .intro__video {
@@ -2947,7 +2949,7 @@ html:has(.intro:not(.is-done)) body {
     max-height: min(68vh, 520px);
     object-fit: contain;
     object-position: center 30%;
-    background-color: var(--intro-bg, #f3f1ed);
+    background-color: var(--intro-bg, #06080c);
   }
 
   .intro__sound,
@@ -2977,8 +2979,8 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .scroll-progress__keyword--welcome {
-    max-width: 6.2rem;
-    font-size: clamp(0.88rem, 4.2vw, 1.05rem);
+    max-width: 6.75rem;
+    font-size: clamp(0.95rem, 4.5vw, 1.15rem) !important;
   }
 
   .wrap {
