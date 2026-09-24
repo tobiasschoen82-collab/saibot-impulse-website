@@ -197,23 +197,51 @@
   function initKlarheitEarthVideo() {
     if (!klarheitEarthVideo) return;
 
-    const section = document.getElementById("klarheit");
+    const playTarget =
+      document.querySelector(".klarheit-sticky") || document.getElementById("klarheit");
     klarheitEarthVideo.muted = true;
+    klarheitEarthVideo.defaultMuted = true;
+    klarheitEarthVideo.setAttribute("playsinline", "");
+    klarheitEarthVideo.setAttribute("webkit-playsinline", "");
+
+    function isEarthInView() {
+      if (!playTarget) return true;
+      const rect = playTarget.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight * 1.02;
+    }
 
     function tryPlayEarth() {
+      if (!isEarthInView()) return;
       if (klarheitEarthVideo.readyState >= 2) {
-        klarheitEarthVideo.play().catch(() => {});
+        const playPromise = klarheitEarthVideo.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {});
+        }
       } else {
         klarheitEarthVideo.addEventListener(
           "canplay",
-          () => klarheitEarthVideo.play().catch(() => {}),
+          () => {
+            klarheitEarthVideo.play().catch(() => {});
+          },
           { once: true }
         );
         klarheitEarthVideo.load();
       }
     }
 
-    if (!section || !("IntersectionObserver" in window)) {
+    function pauseEarthIfHidden() {
+      if (!isEarthInView() && !klarheitEarthVideo.paused) {
+        klarheitEarthVideo.pause();
+      }
+    }
+
+    const unlockPlay = () => {
+      tryPlayEarth();
+    };
+    document.addEventListener("touchstart", unlockPlay, { once: true, passive: true });
+    document.addEventListener("wheel", unlockPlay, { once: true, passive: true });
+
+    if (!playTarget || !("IntersectionObserver" in window)) {
       tryPlayEarth();
       return;
     }
@@ -228,10 +256,22 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -5% 0px" }
+      { threshold: [0, 0.04, 0.12], rootMargin: "60px 0px 60px 0px" }
     );
 
-    observer.observe(section);
+    observer.observe(playTarget);
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (isEarthInView()) {
+          tryPlayEarth();
+        } else {
+          pauseEarthIfHidden();
+        }
+      },
+      { passive: true }
+    );
   }
 
   const brandHome = document.querySelector(".brand--center");
@@ -408,7 +448,9 @@
   function updateHeroStageVisibility() {
     if (!hero) return;
     const rect = hero.getBoundingClientRect();
-    hero.classList.toggle("hero--past-stage", rect.bottom <= window.innerHeight * 0.12);
+    const isMobile = window.matchMedia("(max-width: 960px)").matches;
+    const cutoff = isMobile ? 0.28 : 0.12;
+    hero.classList.toggle("hero--past-stage", rect.bottom <= window.innerHeight * cutoff);
   }
 
   function updateHeroStoryScroll() {
@@ -452,16 +494,36 @@
     if (!klarheitScroll || !klarheitEarth) return;
 
     const rect = klarheitScroll.getBoundingClientRect();
+    const inView = rect.bottom > 0 && rect.top < window.innerHeight;
+
+    if (klarheitEarthVideo && inView && klarheitEarthVideo.paused) {
+      klarheitEarthVideo.play().catch(() => {});
+    }
+
     const scrollable = klarheitScroll.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
+    const isMobile = window.matchMedia("(max-width: 960px)").matches;
+    let scale = isMobile ? 0.42 : 0.22;
+    let opacity = 0.3;
+
+    if (scrollable <= 0) {
+      klarheitEarth.style.setProperty("--earth-scale", String(scale));
+      klarheitEarth.style.setProperty("--earth-opacity", String(opacity));
+      return;
+    }
 
     const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
     const progress = traveled / scrollable;
 
-    let scale = 0.22;
-    let opacity = 0.3;
-
-    if (progress < 0.2) {
+    if (isMobile) {
+      if (progress < 0.35) {
+        scale = 0.38 + progress * 0.35;
+        opacity = 0.32 + progress * 0.22;
+      } else {
+        const grow = (progress - 0.35) / 0.65;
+        scale = 0.5 + grow * 0.45;
+        opacity = 0.4 + grow * 0.28;
+      }
+    } else if (progress < 0.2) {
       scale = 0.18 + progress * 0.55;
       opacity = 0.26 + progress * 0.3;
     } else if (progress < 0.55) {
@@ -475,13 +537,6 @@
 
     klarheitEarth.style.setProperty("--earth-scale", String(scale));
     klarheitEarth.style.setProperty("--earth-opacity", String(opacity));
-
-    if (klarheitEarthVideo) {
-      const inView = rect.bottom > 0 && rect.top < window.innerHeight;
-      if (inView && klarheitEarthVideo.paused) {
-        klarheitEarthVideo.play().catch(() => {});
-      }
-    }
   }
 
   window.addEventListener("scroll", updateScrollUi, { passive: true });
