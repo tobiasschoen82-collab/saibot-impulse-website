@@ -1090,6 +1090,28 @@
         card.style.removeProperty("--surface-glow-y");
       });
 
+      if (card.hasAttribute("data-expand")) {
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-expanded", "false");
+
+        const toggleExpand = () => {
+          const expanded = card.classList.toggle("is-expanded");
+          card.setAttribute("aria-expanded", expanded ? "true" : "false");
+        };
+
+        card.addEventListener("click", (event) => {
+          if (event.target.closest("a, button")) return;
+          toggleExpand();
+        });
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleExpand();
+          }
+        });
+      }
+
       if (!finePointer) return;
 
       card.addEventListener("pointermove", (event) => {
@@ -1102,11 +1124,35 @@
     });
   }
 
+  function initPhilosophySteps() {
+    const section = document.getElementById("philosophie");
+    const stepsRoot = document.getElementById("philosophy-steps");
+    if (!section || !stepsRoot) return;
+
+    const stepCards = Array.from(stepsRoot.querySelectorAll(".surface-card--step"));
+    if (!stepCards.length || !("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle(
+            "is-step-lit",
+            entry.isIntersecting && entry.intersectionRatio >= 0.42
+          );
+        });
+      },
+      { threshold: [0, 0.25, 0.42, 0.65], rootMargin: "-8% 0px -8% 0px" }
+    );
+
+    stepCards.forEach((card) => observer.observe(card));
+  }
+
   initEvolutionVideo();
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();
   initSurfaceCards();
+  initPhilosophySteps();
   initKlarheitEarthVideo();
   initContactModal();
   initContactForm();

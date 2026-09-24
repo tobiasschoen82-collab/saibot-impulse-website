@@ -371,20 +371,24 @@ h3.reveal-text.is-lit,
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
+  align-self: center;
   position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 12rem;
-  min-height: 3.65rem;
+  height: 100%;
+  max-height: var(--header-h);
 }
 
 .brand__logo-video {
   display: block;
-  height: clamp(2.85rem, 4.8vw, 3.45rem);
   width: auto;
   max-width: min(260px, 46vw);
-  object-fit: cover;
-  object-position: center;
+  max-height: calc(var(--header-h) - 1.35rem);
+  height: auto;
+  object-fit: contain;
+  object-position: center center;
   border-radius: 16px;
   background: rgba(6, 8, 12, 0.65);
   box-shadow:
@@ -403,7 +407,11 @@ h3.reveal-text.is-lit,
 }
 
 .brand__wordmark {
-  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   font-weight: 600;
@@ -434,6 +442,9 @@ h3.reveal-text.is-lit,
   transform: scale(0.94);
   pointer-events: none;
   position: absolute;
+  inset: 0;
+  margin: auto;
+  max-height: calc(var(--header-h) - 1.35rem);
 }
 
 .site-header.is-scrolled .brand__wordmark {
@@ -1628,6 +1639,10 @@ h3.reveal-text.is-lit,
   margin-top: 0.5rem;
 }
 
+.philosophy-grid--steps {
+  counter-reset: philosophy-step;
+}
+
 .philosophy-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -1670,6 +1685,15 @@ h3.reveal-text.is-lit,
   color: var(--text-muted);
   font-style: italic;
   text-wrap: balance;
+}
+
+.philosophy-hint {
+  margin: 0.65rem auto 0;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(232, 238, 244, 0.42);
 }
 
 .section__head {
@@ -1855,17 +1879,128 @@ h3.reveal-text.is-lit,
   border-radius: var(--radius);
   border: 1px dashed var(--border-strong);
   display: flex;
-  align-items: flex-end;
-  padding: 1rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem 1rem;
   font-size: 0.85rem;
   color: var(--text-muted);
   background: rgba(17, 26, 36, 0.4);
   transition: border-color 0.2s, background 0.2s;
 }
 
+.block-preview__viz {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.35rem 0.25rem 0;
+}
+
+.block-preview__label {
+  position: relative;
+  z-index: 1;
+}
+
 .block-preview:hover {
   border-color: var(--accent);
   background: rgba(42, 111, 212, 0.08);
+}
+
+.mini-ui {
+  width: 100%;
+  max-width: 11rem;
+  opacity: 0.92;
+}
+
+.mini-ui span {
+  display: block;
+  border-radius: 4px;
+  background: rgba(77, 201, 255, 0.22);
+  border: 1px solid rgba(77, 201, 255, 0.28);
+}
+
+.mini-ui--hero span:nth-child(1) {
+  height: 0.45rem;
+  width: 38%;
+  margin: 0 auto 0.35rem;
+  opacity: 0.55;
+}
+
+.mini-ui--hero span:nth-child(2) {
+  height: 0.65rem;
+  width: 72%;
+  margin: 0 auto 0.45rem;
+}
+
+.mini-ui--hero .mini-ui__cta {
+  height: 0.55rem;
+  width: 42%;
+  margin: 0 auto;
+  background: rgba(77, 201, 255, 0.45);
+}
+
+.mini-ui--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.mini-ui--split span {
+  height: 3.2rem;
+}
+
+.mini-ui--cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+  align-items: end;
+}
+
+.mini-ui--cards span {
+  height: 2.4rem;
+}
+
+.mini-ui--cards span:nth-child(2) {
+  height: 2.85rem;
+}
+
+.mini-ui--cta span {
+  height: 2.75rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(77, 201, 255, 0.35), rgba(42, 111, 212, 0.15));
+}
+
+.mini-ui--gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.mini-ui--gallery span {
+  height: 1.35rem;
+}
+
+.mini-ui--faq span {
+  height: 0.55rem;
+  margin-bottom: 0.35rem;
+  width: 92%;
+}
+
+.mini-ui--faq span:nth-child(2) {
+  width: 78%;
+}
+
+.mini-ui--faq span:nth-child(3) {
+  width: 64%;
+  margin-bottom: 0;
+}
+
+.block-preview.surface-card.is-hovered .mini-ui span,
+.block-preview.surface-card:focus-within .mini-ui span {
+  border-color: rgba(126, 227, 255, 0.45);
+  background: rgba(77, 201, 255, 0.28);
 }
 
 .block-preview--hero {
@@ -2698,13 +2833,15 @@ h3.reveal-text.is-lit,
   .brand--center {
     grid-column: 1;
     justify-self: start;
+    align-self: center;
     min-width: 0;
-    min-height: 2.85rem;
+    height: 100%;
   }
 
   .brand__logo-video {
     max-width: min(168px, 38vw);
-    height: clamp(2rem, 9vw, 2.55rem);
+    max-height: calc(var(--header-h) - 1rem);
+    height: auto;
   }
 
   .nav-toggle {
@@ -2982,6 +3119,77 @@ h3.reveal-text.is-lit,
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
   border-style: solid;
 }
+
+.surface-card[data-expand] {
+  cursor: pointer;
+  padding-bottom: 2.15rem;
+}
+
+.card--lift.surface-card[data-expand] {
+  padding-bottom: 2.35rem;
+}
+
+.surface-card__step {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(17, 26, 36, 0.85);
+  border: 1px solid var(--border);
+  transition:
+    color 0.35s var(--ease),
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease),
+    transform 0.35s var(--ease);
+  z-index: 2;
+}
+
+.surface-card--step.is-step-lit .surface-card__step {
+  color: var(--bg-deep);
+  background: var(--accent);
+  border-color: rgba(126, 227, 255, 0.65);
+  box-shadow: 0 0 18px rgba(77, 201, 255, 0.35);
+  transform: scale(1.06);
+}
+
+.surface-card--step.is-step-lit {
+  border-color: rgba(77, 201, 255, 0.32);
+}
+
+.surface-card__example {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--accent-dim);
+  transition:
+    max-height 0.45s var(--ease),
+    opacity 0.35s var(--ease),
+    margin 0.35s var(--ease);
+}
+
+.surface-card__example strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.surface-card.is-expanded .surface-card__example {
+  max-height: 5rem;
+  opacity: 1;
+  margin-top: 0.85rem;
+}
+
 
 /* Kampagne „Denk mal digital“ */
 .campaign {
