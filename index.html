@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="sAIbot Impulse — Webseiten, KI-Lösungen und digitale Impulse. Artificial Intelligence Solutions aus einer Hand.">
+  <meta name="description" content="sAIbot Impulse — KI-Beratung und Umsetzung für KMU: Use Cases, eigene Programme, Datenschutz im Blick. Edle Webauftritte, wenn Sie sie brauchen.">
   <title>sAIbot Impulse · Artificial Intelligence Solutions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,38 +20,61 @@
     <button type="button" id="intro-skip" class="intro__skip">Überspringen</button>
   </div>
 
+  <div class="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress__track"></div>
+    <div class="scroll-progress__fill" id="scroll-progress-fill"></div>
+    <span class="scroll-progress__keyword" id="scroll-progress-keyword"></span>
+  </div>
+
+  <div class="ai-sparkles" id="ai-sparkles" aria-hidden="true"></div>
+
   <header class="site-header" id="top">
-    <div class="wrap site-header__inner">
+    <div class="site-header__bar">
       <nav class="site-nav site-nav--left" aria-label="Navigation links">
         <a href="#leistungen">Leistungen</a>
         <a href="#projekte">Projekte</a>
         <a href="#bausteine">Bausteine</a>
       </nav>
       <a class="brand brand--center" href="#top" aria-label="sAIbot Impulse Start">
-        <span class="brand__wordmark"><span class="brand-name">s<span class="brand-ai">AI</span>bot</span> Impulse</span>
+        <video
+          id="header-logo-video"
+          class="brand__logo-video"
+          playsinline
+          muted
+          loop
+          preload="auto"
+          poster="assets/logo-dark.png"
+          width="240"
+          height="68"
+        >
+          <source src="assets/logo-intro.mp4" type="video/mp4">
+        </video>
+        <span class="brand__wordmark">
+          <span class="brand__name-light">s<span class="brand-ai">AI</span>bot</span><span class="brand__impulse"> Impulse</span>
+        </span>
       </a>
       <nav class="site-nav site-nav--right" aria-label="Navigation rechts">
         <a href="#ueber-mich">Über mich</a>
         <a href="#klarheit">Leistungsrahmen</a>
-        <a href="#kontakt" class="site-nav__cta">Kontakt</a>
+        <button type="button" class="site-nav__cta" data-contact-open>Kontakt</button>
       </nav>
       <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav-mobile">
         <span></span><span></span><span></span>
       </button>
-      <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
-        <a href="#leistungen">Leistungen</a>
-        <a href="#projekte">Projekte</a>
-        <a href="#bausteine">Bausteine</a>
-        <a href="#ueber-mich">Über mich</a>
-        <a href="#klarheit">Leistungsrahmen</a>
-        <a href="#kontakt" class="site-nav__cta">Kontakt</a>
-      </nav>
     </div>
   </header>
+  <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
+    <a href="#leistungen">Leistungen</a>
+    <a href="#projekte">Projekte</a>
+    <a href="#bausteine">Bausteine</a>
+    <a href="#ueber-mich">Über mich</a>
+    <a href="#klarheit">Leistungsrahmen</a>
+    <button type="button" class="site-nav__cta" data-contact-open>Kontakt</button>
+  </nav>
 
   <main id="main" class="main" hidden>
-    <section class="hero" id="hero">
-      <div class="hero__stage" aria-hidden="true">
+    <section class="hero section--focusable" id="hero">
+      <div class="hero__stage" id="hero-stage" aria-hidden="true">
         <div class="hero__parallax" id="hero-parallax">
           <img src="assets/logo-dark.png" alt="" class="hero__parallax-img" width="1920" height="1080">
         </div>
@@ -59,87 +82,311 @@
         <div class="hero__spotlight-beam"></div>
         <div class="hero__veil"></div>
       </div>
-      <div class="wrap hero__content reveal reveal--fade">
-        <p class="eyebrow reveal-text">Artificial Intelligence Solutions</p>
-        <h1 class="hero__title reveal-text">Digitale Impulse,<br><span class="gradient-text">die bleiben.</span></h1>
-        <p class="hero__lead reveal-text">
-          Ich entwickle edle Webauftritte, begleite Sie bei KI-Themen und setze eigene Produkte wie
-          <strong class="brand-inline">s<span class="brand-ai">AI</span>bot Impulse</strong> um — klar, modern und auf den Punkt.
-        </p>
-        <div class="hero__actions">
-          <a href="#kontakt" class="btn btn--primary">Projekt anfragen</a>
-          <a href="#projekte" class="btn btn--ghost">Referenzen ansehen</a>
+      <div class="hero__panel hero__panel--opening">
+        <div class="wrap hero__content hero__content--opening reveal reveal--fade">
+          <p class="eyebrow reveal-text">Artificial Intelligence Solutions für KMU</p>
+          <h1 class="hero__title reveal-text">Künstliche Intelligenz<br><span class="gradient-text">in Ihrem Unternehmen.</span></h1>
+          <p class="hero__lead reveal-text">
+            Ich mache KI verständlich, entwickle passgenaue Programme und begleite Sie — damit Digitalisierung
+            Freiraum schafft, statt zu überfordern.
+          </p>
+          <div class="hero__actions">
+            <button type="button" class="btn btn--primary" data-contact-open>Gespräch vereinbaren</button>
+            <a href="#leistungen" class="btn btn--ghost">Leistungen entdecken</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll-track" id="hero-story-scroll">
+        <div class="hero__scroll-sticky">
+          <div class="wrap hero__story-wrap">
+            <div class="hero__story-stage" id="hero-story-stage" aria-live="polite">
+              <p class="hero__story-mega" id="hero-story-mega"></p>
+              <p class="hero__story-sub" id="hero-story-sub"></p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="leistungen" class="section">
+    <section id="philosophie" class="section section--tone-navy section--focusable section--philosophy section--philosophy-early" data-scroll-keyword="Nähe">
       <div class="wrap">
-        <header class="section__head reveal reveal--from-left">
-          <p class="eyebrow reveal-text">Was ich für Sie tun kann</p>
+        <header class="section__head section__head--center reveal reveal--from-below">
+          <p class="eyebrow reveal-text">Meine Haltung</p>
+          <h2 class="reveal-text">Digital — damit es wieder persönlicher wird</h2>
+          <p class="section__sub reveal-text">
+            KI begeistert mich. Trotzdem: Kein Tool ersetzt ein Gespräch am Tisch, Kaffee in der Hand,
+            Blick in die Augen. Digitalisierung ist für mich dann gut, wenn sie <strong>Freiraum schafft</strong> —
+            für Kolleginnen, Kunden und das, was wirklich zählt.
+          </p>
+        </header>
+        <div class="philosophy-grid">
+          <article class="philosophy-card reveal reveal--from-left">
+            <span class="philosophy-card__icon" aria-hidden="true">☕</span>
+            <h3 class="reveal-text">Gemeinsam statt solo</h3>
+            <p>KI nutzen wir im Team — im Raum, nicht verstreut in Homeoffice-Schachteln. Ideen entstehen nebeneinander.</p>
+          </article>
+          <article class="philosophy-card reveal reveal--from-below">
+            <span class="philosophy-card__icon" aria-hidden="true">◎</span>
+            <h3 class="reveal-text">Der Mensch entscheidet</h3>
+            <p>Automatisierung dort, wo sie entlastet — nicht dort, wo sie Nähe ersetzt. Was persönlich bleiben soll, bleibt bewusst persönlich.</p>
+          </article>
+          <article class="philosophy-card reveal reveal--from-right">
+            <span class="philosophy-card__icon" aria-hidden="true">✦</span>
+            <h3 class="reveal-text">Zeit zurückgewinnen</h3>
+            <p>Weniger Routine am Bildschirm heißt: öfter anklopfen, anrufen, vorbeigehen — bei Mitarbeitenden wie bei Kunden.</p>
+          </article>
+        </div>
+        <p class="philosophy-quote reveal reveal--fade">
+          „Technik ist das Werkzeug. Menschlichkeit ist der Grund, warum wir sie einsetzen.“
+        </p>
+      </div>
+    </section>
+
+    <section id="ki-kampagne" class="section section--tone-soft section--focusable" data-scroll-keyword="Neugier">
+      <div class="wrap">
+        <header class="section__head section__head--center reveal reveal--from-below">
+          <p class="eyebrow reveal-text">Haltung im Alltag</p>
+          <h2 class="reveal-text">Denk mal digital — erst KI fragen</h2>
+          <p class="section__sub reveal-text">
+            Ein Impuls für Teams und Unternehmen: KI nicht als Ersatz, sondern als <strong>erste Anlaufstelle</strong>
+            im eigenen Denkprozess — bevor lange gesucht, geraten oder aufgeschoben wird.
+          </p>
+        </header>
+        <div class="campaign">
+          <figure class="campaign__flyer reveal reveal--from-left">
+            <img
+              src="assets/flyer-denk-mal-digital.jpg"
+              alt="Flyer-Kampagne: Denk mal digital, erst KI fragen"
+              loading="lazy"
+              width="480"
+              height="720"
+            >
+            <figcaption class="campaign__flyer-cap">Vorlage für interne Kampagnen · anpassbar für Ihr Team</figcaption>
+          </figure>
+          <div class="campaign__steps">
+            <article class="campaign-step campaign-step--mint reveal reveal--from-right">
+              <span class="campaign-step__kicker">Schritt 1</span>
+              <h3 class="reveal-text">Denk mal digital</h3>
+              <p class="campaign-step__lead reveal-text"><strong>Erst KI fragen.</strong></p>
+              <p>Machen Sie den ersten Gedanken smarter — nutzen Sie KI als Startpunkt, nicht als Nachtrag.</p>
+            </article>
+            <article class="campaign-step campaign-step--gold reveal reveal--from-right">
+              <span class="campaign-step__kicker">Schritt 2</span>
+              <h3 class="reveal-text">Frag KI</h3>
+              <p>Bevor Sie lange suchen: oft liefert KI in Sekunden eine erste Struktur, Formulierung oder Idee.</p>
+            </article>
+            <article class="campaign-step campaign-step--coral reveal reveal--from-right">
+              <span class="campaign-step__kicker">Schritt 3</span>
+              <h3 class="reveal-text">Mit dem ersten Klick</h3>
+              <p>Schnelle Unterstützung und Impulse — dann gemeinsam prüfen, was wirklich passt und was Menschenarbeit bleibt.</p>
+            </article>
+            <article class="campaign-step campaign-step--sky reveal reveal--from-right">
+              <span class="campaign-step__kicker">Schritt 4</span>
+              <h3 class="reveal-text">KI als erste Anlaufstelle</h3>
+              <p>Gewohnheit schafft Neugier: Jede Frage darf zuerst an KI — die Antwort immer an Ihr Team und Ihre Werte.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="leistungen" class="section section--tone-navy section--focusable" data-scroll-keyword="Nutzen">
+      <div class="wrap">
+        <header class="section__head reveal reveal--from-below">
+          <p class="eyebrow reveal-text">Zwei Wege, ein Ansprechpartner</p>
           <h2 class="reveal-text">Leistungen</h2>
+          <p class="section__sub reveal-text">
+            Schwerpunkt: KI verständlich machen und nutzbar — für Teams ohne großes IT-Budget.
+            Webseiten setze ich mit, wenn sie zu Ihrem Auftritt passen.
+          </p>
         </header>
         <div class="cards cards--3">
-          <article class="card card--lift reveal reveal--from-left">
-            <div class="card__icon" aria-hidden="true">◇</div>
-            <h3 class="reveal-text">Webseiten für Unternehmen</h3>
-            <p>
-              Individuelle Sites von der Idee bis zur Übergabe — responsive, schnell und mit Blick auf
-              Ihre Zielgruppe. Ideal für Selbstständige, Vereine und KMU.
-            </p>
-          </article>
-          <article class="card card--lift reveal reveal--from-right">
+          <article class="card card--lift reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◈</div>
-            <h3 class="reveal-text">KI-Begleitung &amp; Reparatur</h3>
+            <h3 class="reveal-text">KI-Beratung &amp; Use Cases</h3>
             <p>
-              Sie sind bei KI-Themen eingeladen oder stecken fest? Ich sortiere, erkläre und repariere
-              Workflows — praxisnah, ohne Buzzword-Bingo.
+              Was ist Künstliche Intelligenz überhaupt — und was bringt sie <em>Ihnen</em>? Gemeinsam
+              identifizieren wir sinnvolle Anwendungen — immer mit der Frage, ob danach mehr Zeit für
+              echte Gespräche bleibt. Auf Augenhöhe, ohne Fachchinesisch.
             </p>
           </article>
-          <article class="card card--lift reveal reveal--from-left">
+          <article class="card card--lift reveal reveal--from-below">
+            <div class="card__icon" aria-hidden="true">◇</div>
+            <h3 class="reveal-text">Eigene Programme mit KI</h3>
+            <p>
+              Kleine Tools, die genau zu Ihrem Prozess passen: von der Idee bis zur lauffähigen Lösung,
+              mit moderner KI-Unterstützung in der Entwicklung — transparent, iterativ, bezahlbar für KMU.
+            </p>
+          </article>
+          <article class="card card--lift reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◆</div>
-            <h3 class="reveal-text">Eigene Produkte</h3>
+            <h3 class="reveal-text">Chancen, Risiken &amp; Datenschutz</h3>
             <p class="reveal-text">
-              Hinter <strong class="brand-inline">s<span class="brand-ai">AI</span>bot Impulse</strong> steckt meine To-Do- und Impuls-App — ein Beispiel,
-              wie ich digitale Tools denke und umsetze.
+              KI wirft Fragen zu Daten, Verantwortung und Grenzen auf. Ich spreche diese Themen offen an
+              und helfe bei der Einordnung — ohne mich als zertifizierten Datenschutzbeauftragten auszugeben,
+              aber mit dem Blick dafür, was Sie wissen sollten, bevor Sie starten.
+            </p>
+          </article>
+        </div>
+        <div class="cards cards--3 cards--follow">
+          <article class="card card--lift reveal reveal--from-below">
+            <div class="card__icon" aria-hidden="true">▣</div>
+            <h3 class="reveal-text">Webauftritt &amp; digitale Visitenkarte</h3>
+            <p>
+              Edle, schnelle Webseiten für Selbstständige und KMU — wenn Sie einen professionellen Auftritt
+              brauchen, ohne Agentur-Budget. Ein Baustein neben Ihrer KI-Strategie, nicht das ganze Programm.
+            </p>
+          </article>
+          <article class="card card--lift reveal reveal--from-below">
+            <div class="card__icon" aria-hidden="true">◎</div>
+            <h3 class="reveal-text">Workflows reparieren &amp; verbessern</h3>
+            <p>
+              Bestehende KI- oder Automatisierungs-Strecken hängen? Ich analysiere, erkläre und bringe
+              Prozesse wieder in Gang — praxisnah statt Buzzword-Bingo.
+            </p>
+          </article>
+          <article class="card card--lift reveal reveal--from-below">
+            <div class="card__icon" aria-hidden="true">✦</div>
+            <h3 class="reveal-text">Eigenes Produkt: s<span class="brand-ai">AI</span>bot Impulse</h3>
+            <p class="reveal-text">
+              Meine Impuls- und To-Do-App zeigt, wie ich digitale Tools denke — und wie KI-gestützte
+              Entwicklung in der Praxis aussehen kann.
             </p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="projekte" class="section section--alt">
+    <section id="ki-impuls" class="section section--tone-mid section--focusable" data-scroll-keyword="Verstehen">
+      <div class="wrap ki-spotlight">
+        <div class="ki-spotlight__visual reveal reveal--from-below">
+          <div class="ki-stack" id="ki-visual-stack" aria-live="polite">
+            <figure class="ki-stack__card" data-slot="0" data-caption="sAIbot Impulse · Ihre Marke">
+              <img src="assets/hero-texture.png" alt="" loading="lazy" width="720" height="480">
+            </figure>
+            <figure class="ki-stack__card" data-slot="1" data-caption="Jetzt · Warum KI">
+              <img src="assets/ki-why-now.jpg" alt="" loading="lazy" width="720" height="480">
+            </figure>
+            <figure class="ki-stack__card" data-slot="2" data-caption="Neugier · Vernetztes Denken">
+              <img src="assets/ki-neural.jpg" alt="" loading="lazy" width="720" height="480">
+            </figure>
+            <figure class="ki-stack__card" data-slot="3" data-caption="Möglichkeiten · Vertrauen">
+              <img src="assets/ki-trust.jpg" alt="" loading="lazy" width="720" height="480">
+            </figure>
+          </div>
+          <p class="ki-stack__caption" id="ki-stack-caption">sAIbot Impulse · Ihre Marke</p>
+        </div>
+        <div class="ki-spotlight__text reveal reveal--from-below">
+          <p class="eyebrow reveal-text">Warum KI jetzt</p>
+          <h2 class="reveal-text">Vom Staunen zur konkreten Idee</h2>
+          <p class="reveal-text">
+            Viele Unternehmen spüren: Hier verändert sich etwas — aber wo anfangen? Ich übersetze
+            KI in Schritte, die Sie gehen können — und immer mit der Frage: Wird Ihr Team dadurch
+            <em>menschennäher</em> oder nur schneller allein am Bildschirm?
+          </p>
+          <ul class="ki-spotlight__list">
+            <li>Gemeinsame Sprache: Was KI kann — und was bewusst Menschenarbeit bleibt</li>
+            <li>Erste Piloten statt großer IT-Projekte — nebeneinander, nicht jeder für sich</li>
+            <li>Eigene kleine Programme, wenn Standardsoftware nicht passt</li>
+            <li>Datenschutz und Risiken früh mitdenken, nicht erst am Ende</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="evolution" class="section section--evolution section--focusable" data-scroll-keyword="Zeitstrahl">
+      <div class="evolution-scroll" id="evolution-scroll">
+        <div class="evolution-sticky">
+          <div class="wrap evolution-layout">
+            <div class="evolution-reel-wrap reveal reveal--from-left">
+              <div class="evolution-reel" id="evolution-reel" aria-hidden="true">
+                <div class="evolution-reel__hub"></div>
+                <div class="evolution-reel__arm"></div>
+                <div class="evolution-reel__film"></div>
+              </div>
+              <p class="evolution-reel__label">Vom Daumenkino zur KI</p>
+            </div>
+            <div class="evolution-screen reveal reveal--from-right">
+              <div class="evolution-beam" aria-hidden="true"></div>
+              <div class="evolution-beam evolution-beam--soft" aria-hidden="true"></div>
+              <div class="evolution-projector" id="evolution-projector">
+                <div class="flipbook" id="flipbook">
+                  <div class="flipbook__frame is-active" data-era="0">
+                    <svg class="flipbook__icon" viewBox="0 0 120 80" aria-hidden="true"><rect x="8" y="12" width="28" height="36" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="40" y="12" width="28" height="36" rx="2" fill="rgba(77,201,255,0.2)" stroke="currentColor" stroke-width="2"/><rect x="72" y="12" width="28" height="36" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="28" r="4" fill="currentColor"/><circle cx="54" cy="32" r="5" fill="currentColor"/><circle cx="86" cy="30" r="4" fill="currentColor"/></svg>
+                    <span class="flipbook__mini">Daumenkino</span>
+                  </div>
+                  <div class="flipbook__frame" data-era="1">
+                    <svg class="flipbook__icon" viewBox="0 0 120 80" aria-hidden="true"><circle cx="38" cy="40" r="26" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="38" cy="40" r="8" fill="currentColor" opacity="0.5"/><circle cx="82" cy="40" r="26" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="82" cy="40" r="8" fill="currentColor" opacity="0.5"/><rect x="52" y="34" width="16" height="12" fill="rgba(77,201,255,0.25)" stroke="currentColor" stroke-width="1.5"/><path d="M14 40h12M94 40h12" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></svg>
+                    <span class="flipbook__mini">Filmrolle</span>
+                  </div>
+                  <div class="flipbook__frame" data-era="2">
+                    <svg class="flipbook__icon" viewBox="0 0 120 80" aria-hidden="true"><rect x="22" y="14" width="76" height="48" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="20" width="64" height="36" fill="rgba(77,201,255,0.12)"/><rect x="48" y="62" width="24" height="6" rx="1" fill="currentColor" opacity="0.6"/><line x1="34" y1="62" x2="86" y2="62" stroke="currentColor" stroke-width="2"/></svg>
+                    <span class="flipbook__mini">Computer</span>
+                  </div>
+                  <div class="flipbook__frame" data-era="3">
+                    <svg class="flipbook__icon" viewBox="0 0 120 80" aria-hidden="true"><circle cx="60" cy="40" r="8" fill="currentColor"/><circle cx="28" cy="28" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="92" cy="28" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="56" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="92" cy="56" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M33 31 L54 37 M87 31 L66 37 M33 53 L54 47 M87 53 L66 47" stroke="currentColor" stroke-width="1.5"/></svg>
+                    <span class="flipbook__mini">Netz</span>
+                  </div>
+                  <div class="flipbook__frame" data-era="4">
+                    <svg class="flipbook__icon" viewBox="0 0 120 80" aria-hidden="true"><path d="M60 14 L72 38 H96 L76 52 L82 76 L60 62 L38 76 L44 52 L24 38 H48 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="60" cy="40" r="6" fill="rgba(77,201,255,0.35)"/></svg>
+                    <span class="flipbook__mini">Lernen</span>
+                  </div>
+                  <div class="flipbook__frame" data-era="5">
+                    <div class="flipbook__ai-lockup" aria-hidden="true">
+                      <span class="flipbook__ai-s">s</span><span class="flipbook__ai-main"><span class="flipbook__ai-cap">AI</span></span>
+                      <span class="flipbook__ai-dot" aria-hidden="true"></span>
+                    </div>
+                    <span class="flipbook__mini">KI · Heute</span>
+                  </div>
+                </div>
+              </div>
+              <p class="evolution-caption reveal-text" id="evolution-caption">
+                Jede Epoche wirft Bilder an die Wand — bis Künstliche Intelligenz Ihre Idee trägt.
+              </p>
+              <div class="evolution-strip reveal reveal--from-below">
+                <span class="evolution-strip__item">Analog</span>
+                <span class="evolution-strip__item">Digital</span>
+                <span class="evolution-strip__item">Vernetzt</span>
+                <span class="evolution-strip__item">Intelligent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projekte" class="section section--tone-glow section--focusable" data-scroll-keyword="Werkstatt">
       <div class="wrap">
-        <header class="section__head reveal reveal--from-right">
+        <header class="section__head reveal reveal--from-below">
           <p class="eyebrow reveal-text">Aus meiner Werkstatt</p>
           <h2 class="reveal-text">Projekte &amp; Referenzen</h2>
           <p class="section__sub reveal-text">
-            Eigenes Produkt plus ausgewählte Kundenauftritte — Platzhalter können Sie jederzeit durch echte URLs ersetzen.
+            KI-gestützte Produkte und digitale Auftritte — Beispiele, wie Umsetzung bei Ihnen aussehen kann.
           </p>
         </header>
         <div class="showcase">
-          <article class="showcase__featured reveal reveal--from-left">
-            <div class="showcase__badge">Eigenes Produkt</div>
+          <article class="showcase__featured reveal reveal--from-below">
+            <div class="showcase__badge">Eigenes Produkt · KI-Entwicklung</div>
             <h3 class="reveal-text">s<span class="brand-ai">AI</span>bot Impulse</h3>
-            <p class="showcase__tagline">To-Do-App mit Fokus auf Impulse statt Listen-Stress.</p>
+            <p class="showcase__tagline">To-Do-App mit Fokus auf Impulse statt Listen-Stress — gebaut mit modernen KI-Werkzeugen.</p>
             <ul class="feature-list">
               <li>Übersichtliche Aufgaben &amp; Prioritäten</li>
               <li>Modernes, reduziertes Interface</li>
-              <li>Ideal für Vielbeschäftigte &amp; Kreative</li>
+              <li>Vorbild für passgenaue Software im KMU-Umfeld</li>
             </ul>
-            <a href="#kontakt" class="btn btn--primary btn--sm">Early Access / Demo anfragen</a>
+            <button type="button" class="btn btn--primary btn--sm" data-contact-open>Early Access / Demo anfragen</button>
           </article>
           <div class="showcase__grid">
-            <article class="showcase__item reveal reveal--from-right">
-              <span class="showcase__label">Kundenwebseite</span>
-              <h3 class="reveal-text">Projekt Alpha</h3>
-              <p>Kompakte Unternehmensseite mit klarer Struktur und starker Startseite.</p>
-              <a href="#" class="text-link" data-placeholder-link>Beispiel öffnen →</a>
+            <article class="showcase__item reveal reveal--from-below">
+              <span class="showcase__label">KI · Prozess</span>
+              <h3 class="reveal-text">Use-Case Workshop</h3>
+              <p>Strukturierte Erarbeitung erster KI-Ideen für ein mittelständisches Team — von der Frage bis zum Piloten.</p>
+              <button type="button" class="text-link text-link--btn" data-contact-open>Anfragen →</button>
             </article>
-            <article class="showcase__item reveal reveal--from-right">
-              <span class="showcase__label">Kundenwebseite</span>
+            <article class="showcase__item reveal reveal--from-below">
+              <span class="showcase__label">Web · KMU</span>
               <h3 class="reveal-text">Projekt Beta</h3>
-              <p>Landingpage mit Fokus auf Conversion und mobile Nutzer.</p>
+              <p>Edler Webauftritt mit klarer Botschaft — Platzhalter für Ihre nächste Kundenreferenz.</p>
               <a href="#" class="text-link" data-placeholder-link>Beispiel öffnen →</a>
             </article>
           </div>
@@ -147,85 +394,98 @@
       </div>
     </section>
 
-    <section id="bausteine" class="section">
+    <section id="bausteine" class="section section--tone-deep section--focusable" data-scroll-keyword="Modular">
       <div class="wrap">
-        <header class="section__head reveal reveal--from-left">
-          <p class="eyebrow reveal-text">Inspiration für Ihre Site</p>
+        <header class="section__head reveal reveal--from-below">
+          <p class="eyebrow reveal-text">Module für Ihren Auftritt</p>
           <h2 class="reveal-text">Bausteine &amp; Stile</h2>
           <p class="section__sub reveal-text">
-            So könnte Ihre Seite aussehen — modulare Elemente, die wir kombinieren.
+            Für Webprojekte: modulare Elemente in edlem Look. Für KI: Workshops, Piloten und kleine Tools —
+            beides lässt sich kombinieren.
           </p>
         </header>
         <div class="blocks">
-          <div class="block-preview block-preview--hero reveal reveal--from-left"><span class="reveal-text">Hero mit Claim</span></div>
-          <div class="block-preview block-preview--split reveal reveal--from-right"><span class="reveal-text">Text + Bild</span></div>
-          <div class="block-preview block-preview--cards reveal reveal--from-left"><span class="reveal-text">Leistungs-Karten</span></div>
-          <div class="block-preview block-preview--cta reveal reveal--from-right"><span class="reveal-text">Kontakt-Call-to-Action</span></div>
-          <div class="block-preview block-preview--gallery reveal reveal--from-left"><span class="reveal-text">Referenz-Galerie</span></div>
-          <div class="block-preview block-preview--faq reveal reveal--from-right"><span class="reveal-text">FAQ &amp; Vertrauen</span></div>
+          <div class="block-preview block-preview--hero reveal reveal--from-below"><span class="reveal-text">KI-Impuls · Hero</span></div>
+          <div class="block-preview block-preview--split reveal reveal--from-below"><span class="reveal-text">Use Case · Story</span></div>
+          <div class="block-preview block-preview--cards reveal reveal--from-below"><span class="reveal-text">Leistungs-Karten</span></div>
+          <div class="block-preview block-preview--cta reveal reveal--from-below"><span class="reveal-text">Vertrauen · Kontakt</span></div>
+          <div class="block-preview block-preview--gallery reveal reveal--from-below"><span class="reveal-text">Referenzen</span></div>
+          <div class="block-preview block-preview--faq reveal reveal--from-below"><span class="reveal-text">FAQ · Datenschutz-Hinweise</span></div>
         </div>
         <p class="blocks__note">
-          Im Gespräch wählen wir gemeinsam die Bausteine — passend zu Budget, Branche und Ihrem Auftritt.
+          Im Gespräch klären wir, ob der nächste Schritt eher KI-Beratung, ein kleines Programm oder ein Webauftritt ist —
+          passend zu Budget und Ziel.
         </p>
       </div>
     </section>
 
-    <section id="ueber-mich" class="section section--alt">
+    <section id="ueber-mich" class="section section--tone-mid section--focusable" data-scroll-keyword="Mensch">
       <div class="wrap about">
-        <div class="about__visual reveal reveal--from-left">
-          <img src="assets/hero-texture.png" alt="sAIbot Impulse Branding" loading="lazy" width="600" height="400">
+        <div class="about__visual about__visual--portrait reveal reveal--from-below">
+          <img src="assets/tobias-schoen.jpg" alt="Tobias Schön — sAIbot Impulse" loading="lazy" width="600" height="750">
         </div>
-        <div class="about__text reveal reveal--from-right">
+        <div class="about__text reveal reveal--from-below">
           <p class="eyebrow reveal-text">Über mich</p>
           <h2 class="reveal-text">Wer hinter s<span class="brand-ai">AI</span>bot Impulse steht</h2>
           <p class="reveal-text">
-            Ich verbinde Gestaltung, Technik und künstliche Intelligenz zu Lösungen, die im Alltag funktionieren.
-            Ob erste Webseite für Ihr Geschäft, ein Refresh Ihres Auftritts oder KI-Unterstützung bei konkreten
-            Fragen — ich arbeite direkt, transparent und ohne unnötige Komplexität.
+            Ich bringe KI in KMU — nicht als Selbstzweck, sondern als Hebel für Klarheit und Beziehung.
+            Nach Corona und endlosen Online-Meetings verlieren viele den persönlichen Faden; genau hier
+            kann durchdachte Digitalisierung helfen, ihn wiederzufinden.
           </p>
           <p class="reveal-text">
-            <strong>saibot-impulse.de</strong> ist meine Visitenkarte: hier sehen Sie Stil, Qualität und
-            wie ich Projekte denke. Lassen Sie uns darüber sprechen, was Sie brauchen.
+            <strong>saibot-impulse.de</strong> ist meine Visitenkarte: edel, modern — und menschlich gedacht.
+            Lassen Sie uns sprechen, wie das bei Ihnen aussehen kann.
           </p>
         </div>
       </div>
     </section>
 
-    <section id="klarheit" class="section">
-      <div class="wrap">
-        <header class="section__head reveal reveal--from-left">
+    <section id="klarheit" class="section section--klarheit section--focusable" data-scroll-keyword="Vertrauen">
+      <div class="klarheit-scroll" id="klarheit-scroll">
+        <div class="klarheit-sticky">
+          <div class="klarheit-earth" id="klarheit-earth" aria-hidden="true">
+            <video id="klarheit-earth-video" class="klarheit-earth__video" playsinline muted loop preload="metadata" poster="assets/ki-trust.jpg">
+              <source src="assets/earth-nasa.mp4" type="video/mp4">
+            </video>
+            <div class="klarheit-earth__veil"></div>
+            <p class="klarheit-earth__credit">Erde: NASA SVS (Public Domain)</p>
+          </div>
+          <div class="wrap klarheit-stage">
+        <header class="section__head section__head--center reveal reveal--from-below">
           <p class="eyebrow reveal-text">Fair &amp; transparent</p>
           <h2 class="reveal-text">Leistungsrahmen — damit beide Seiten entspannt sind</h2>
           <p class="section__sub reveal-text">
-            Verkaufen möchte ich natürlich — aber auf Augenhöhe. Das schafft Vertrauen und weniger Missverständnisse.
+            Verkaufen möchte ich natürlich — aber auf Augenhöhe. Klarheit schafft Vertrauen, gerade bei KI-Themen.
+            Ehrliche Grenzen schützen Sie und mich — so wissen wir, wo meine Expertise endet.
           </p>
         </header>
-        <div class="clarity">
-          <div class="clarity__col clarity__col--yes reveal reveal--from-left">
+        <div class="clarity clarity--wide">
+          <div class="clarity__col clarity__col--yes reveal reveal--from-below">
             <h3 class="reveal-text">Das können Sie erwarten</h3>
             <ul>
-              <li>Konzeption, Design und Umsetzung Ihrer Webseite im vereinbarten Umfang</li>
-              <li>Saubere Übergabe der Dateien bzw. Zugänge nach Projektabschluss</li>
-              <li>KI-Beratung: Einordnung, Workflows verbessern, „kaputte“ Prozesse reparieren</li>
+              <li>KI-Beratung: Einordnung, Use Cases, Workshops und erste Piloten — mit Blick auf Mensch und Team</li>
+              <li>Entwicklung passgenauer Programme mit transparenter, iterativer Vorgehensweise</li>
+              <li>Offene Gespräche zu Chancen, Grenzen und datenschutzrelevanten Fragen bei KI</li>
+              <li>Webseiten: Konzeption, Design und Umsetzung im vereinbarten Umfang — wenn gewünscht</li>
               <li>Klare Absprachen zu Terminen, Inhalten und Ihren Mitwirkungspflichten</li>
             </ul>
           </div>
-          <div class="clarity__col clarity__col--no reveal reveal--from-right">
-            <h3 class="reveal-text">Darin bin ich (noch) nicht Ihr Ansprechpartner</h3>
+          <div class="clarity__col clarity__col--no reveal reveal--from-below">
+            <h3 class="reveal-text">Dafür gibt es bessere Spezialisten</h3>
             <ul>
               <li>
-                <strong>Keine Rechts- oder Datenschutzberatung:</strong> Ich bin kein Anwalt und kein
-                zertifizierter Datenschutzbeauftragter. Rechtstexte (Impressum, Datenschutz) liefere ich
-                auf Wunsch als <em>Vorlage</em> — die finale Verantwortung liegt bei Ihnen bzw. Ihrer Beratung.
+                <strong>Recht &amp; Datenschutz:</strong> Ich bin kein Anwalt und kein zertifizierter Datenschutzbeauftragter.
+                Texte fürs Impressum oder die Datenschutzerklärung kann ich auf Wunsch als <em>Startvorlage</em> liefern —
+                die rechtliche Verantwortung trägt Ihr Unternehmen bzw. Ihre Beratung.
               </li>
               <li>
-                <strong>Kein „100&nbsp;% sicher für immer“:</strong> Nach der Übergabe ohne Wartungsvertrag
-                übernehme ich keine Haftung für Ausfälle durch Hosting, Updates Dritter oder spätere Änderungen
-                durch andere Dienstleister.
+                <strong>Betrieb nach Projektende:</strong> Nach der Übergabe ohne Wartungsvereinbarung begleite ich Sie
+                gerne bei Fragen — für den laufenden Betrieb bei Hosting oder Drittanbietern sind diese Anbieter
+                Ihr erster Ansprechpartner. Ich helfe bei der Einordnung — verständlich und ohne Druck.
               </li>
               <li>
-                <strong>Keine Garantie für externe Dienste:</strong> APIs, KI-Modelle und Plattformen unterliegen
-                ihren Anbietern — ich helfe bei Integration, kann deren Verfügbarkeit aber nicht garantieren.
+                <strong>Externe Plattformen:</strong> KI-Modelle, APIs und Cloud-Dienste leben von ihren Anbietern.
+                Ich integriere sie sorgfältig; über deren Verfügbarkeit entscheiden die Betreiber — das besprechen wir offen.
               </li>
             </ul>
             <p class="clarity__footer">
@@ -234,32 +494,76 @@
             </p>
           </div>
         </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="kontakt" class="section section--contact">
-      <div class="wrap contact">
-        <header class="section__head section__head--center reveal reveal--fade">
-          <p class="eyebrow reveal-text">Los geht's</p>
-          <h2 class="reveal-text">Kontakt</h2>
-          <p class="section__sub reveal-text">Kurze Nachricht reicht — ich melde mich zeitnah.</p>
-        </header>
-        <div class="contact__grid">
-          <a class="contact__card reveal reveal--from-left" href="mailto:kontakt@saibot-impulse.de">
-            <span class="contact__label">E-Mail</span>
-            <span class="contact__value">kontakt@saibot-impulse.de</span>
-          </a>
-          <div class="contact__card contact__card--static reveal reveal--from-right">
-            <span class="contact__label">Domain</span>
-            <span class="contact__value">www.saibot-impulse.de</span>
-          </div>
-        </div>
-        <p class="contact__hint">
-          Tipp: Ersetzen Sie die E-Mail-Adresse oben durch Ihre echte IONOS-Postfach-Adresse, sobald Sie sie eingerichtet haben.
-        </p>
-      </div>
-    </section>
   </main>
+
+  <div class="contact-modal" id="contact-modal" hidden aria-hidden="true">
+    <div class="contact-modal__backdrop" data-contact-close tabindex="-1"></div>
+    <div class="contact-modal__panel" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+      <button type="button" class="contact-modal__close" data-contact-close aria-label="Schließen">×</button>
+      <header class="contact-modal__head">
+        <p class="eyebrow">Los geht's</p>
+        <h2 id="contact-modal-title">Kontakt</h2>
+        <p class="contact-modal__lead">Schreiben Sie mir — ich antworte persönlich, nicht automatisiert.</p>
+      </header>
+      <form class="contact-form contact-form--modal" id="contact-form" novalidate>
+        <div class="contact-form__row">
+          <label class="field">
+            <span class="field__label">Ihr Name</span>
+            <input type="text" name="name" id="contact-name" autocomplete="name" required placeholder="Wie darf ich Sie ansprechen?">
+          </label>
+          <label class="field">
+            <span class="field__label">E-Mail</span>
+            <input type="email" name="email" id="contact-email" autocomplete="email" required placeholder="ihre@firma.de">
+          </label>
+        </div>
+        <fieldset class="interest-fieldset">
+          <legend class="field__label">Wofür interessieren Sie sich?</legend>
+          <div class="interest-chips">
+            <label class="interest-chip"><input type="checkbox" name="interest" value="KI-Beratung & Use Cases"><span>KI-Beratung</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Eigenes Programm"><span>Eigenes Programm</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Workshop im Team"><span>Workshop</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Webauftritt"><span>Webauftritt</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Menschlichkeit & Digitalisierung"><span>Mensch + Digital</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Noch unsicher"><span>Erst mal schauen</span></label>
+            <label class="interest-chip"><input type="checkbox" name="interest" value="Termin vereinbaren"><span>Termin</span></label>
+          </div>
+        </fieldset>
+        <section class="booking-block" id="booking-block">
+          <div class="booking-block__head">
+            <h3 class="booking-block__title">Termin anfragen</h3>
+            <p class="booking-block__hint">
+              Vorschau-Kalender — freie Fenster sehen Besucher hier. Später pflegen Sie Verfügbarkeit in
+              <code>js/site-config.js</code>.
+            </p>
+            <p class="booking-block__next">Nächster freier Termin: <strong data-booking-next>—</strong></p>
+          </div>
+          <div class="booking-block__layout">
+            <div data-booking-cal class="booking-cal-host"></div>
+            <div class="booking-times-wrap">
+              <span class="field__label">Uhrzeit</span>
+              <div data-booking-times class="booking-times"></div>
+            </div>
+          </div>
+          <input type="hidden" id="contact-appointment" name="appointment" value="">
+          <p class="booking-selected" data-booking-selected hidden></p>
+        </section>
+        <label class="field">
+          <span class="field__label">Ihre Nachricht</span>
+          <textarea name="message" id="contact-message" rows="5" required placeholder="Was ist Ihre Situation? Was wünschen Sie sich — und was soll bewusst persönlich bleiben?"></textarea>
+        </label>
+        <div class="contact-form__actions">
+          <button type="submit" class="btn btn--primary">Nachricht senden</button>
+          <p class="contact-form__note">Öffnet Ihr E-Mail-Programm — Sie können alles noch anpassen.</p>
+        </div>
+      </form>
+      <p class="contact-modal__direct">Oder direkt: <a href="mailto:kontakt@saibot-impulse.de">kontakt@saibot-impulse.de</a></p>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
@@ -268,10 +572,17 @@
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
       </nav>
+      <p class="site-footer__stat">
+        <span class="site-footer__stat-label">Besucher auf dieser Seite</span>
+        <span class="site-footer__stat-value" id="visitor-count" title="Wird geladen">…</span>
+      </p>
       <p class="site-footer__copy">© <span id="year"></span> sAIbot Impulse. Alle Rechte vorbehalten.</p>
     </div>
   </footer>
 
+  <script src="js/site-config.js"></script>
+  <script src="js/booking.js"></script>
+  <script src="js/visitors.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

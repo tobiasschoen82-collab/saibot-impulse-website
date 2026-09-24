@@ -1,6 +1,7 @@
 (function () {
   const intro = document.getElementById("intro");
   const video = document.getElementById("intro-video");
+  const headerVideo = document.getElementById("header-logo-video");
   const skipBtn = document.getElementById("intro-skip");
   const main = document.getElementById("main");
   const header = document.querySelector(".site-header");
@@ -10,10 +11,75 @@
   const placeholderLinks = document.querySelectorAll("[data-placeholder-link]");
   const hero = document.getElementById("hero");
   const heroParallax = document.getElementById("hero-parallax");
+  const scrollProgressFill = document.getElementById("scroll-progress-fill");
+  const scrollKeywordEl = document.getElementById("scroll-progress-keyword");
+  const evolutionScroll = document.getElementById("evolution-scroll");
+  const evolutionReel = document.getElementById("evolution-reel");
+  const flipbook = document.getElementById("flipbook");
+  const evolutionCaption = document.getElementById("evolution-caption");
+  const heroStoryScroll = document.getElementById("hero-story-scroll");
+  const heroStoryMega = document.getElementById("hero-story-mega");
+  const heroStorySub = document.getElementById("hero-story-sub");
+  const klarheitScroll = document.getElementById("klarheit-scroll");
+  const klarheitEarth = document.getElementById("klarheit-earth");
+  const klarheitEarthVideo = document.getElementById("klarheit-earth-video");
+  const contactForm = document.getElementById("contact-form");
+  const contactModal = document.getElementById("contact-modal");
   let scrollRevealReady = false;
+  let activeScrollKeyword = "";
+  let activeSectionKeyword = "";
+  const SCROLL_BRAND_THRESHOLD = 36;
+  const SCROLL_KEYWORD_WELCOME = "Herzlich willkommen";
+
+  const HERO_STORY_BEATS = [
+    { until: 0.1, mega: "", sub: "" },
+    { until: 0.24, mega: "KI · verständlich.", sub: "" },
+    { until: 0.34, mega: "KI · verständlich.", sub: "für KMU" },
+    { until: 0.44, mega: "Haltung", sub: "" },
+    {
+      until: 0.54,
+      mega: "Haltung",
+      sub: "KI begeistert mich — Nähe entsteht im Team, am Tisch, nicht am Autopiloten.",
+    },
+    { until: 0.64, mega: "Digitalisierung", sub: "" },
+    {
+      until: 0.74,
+      mega: "Digitalisierung",
+      sub: "Damit das persönliche Miteinander wieder in den Mittelpunkt rückt.",
+    },
+    {
+      until: 0.84,
+      mega: "Der Mensch entscheidet",
+      sub: "Technik unterstützt — sie ersetzt kein Gespräch nebeneinander.",
+    },
+    {
+      until: 0.96,
+      mega: "Impulse",
+      sub: "Passgenaue Programme — und Zeit für echte Begegnungen.",
+    },
+    { until: 1.01, mega: "", sub: "" },
+  ];
+
+  const EVOLUTION_CAPTIONS = [
+    "Einzelbilder werden zur Bewegung — wie Ideen, die Schritt für Schritt reifen.",
+    "Die Filmrolle speichert Geschichten — Technik wird greifbar und teilbar.",
+    "Computer strukturieren Wissen — Programme übernehmen wiederholbare Arbeit.",
+    "Netzwerke verbinden Menschen und Maschinen weltweit.",
+    "Systeme lernen aus Daten — Muster werden sichtbar.",
+    "Künstliche Intelligenz wird Partner: passgenaue Software für Ihr Unternehmen.",
+  ];
 
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
+  }
+
+  function playHeaderVideo() {
+    if (!headerVideo) return;
+    headerVideo.muted = true;
+    const playPromise = headerVideo.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
   }
 
   function finishIntro() {
@@ -27,21 +93,34 @@
     if (video) {
       video.pause();
     }
+    playHeaderVideo();
     document.body.style.overflow = "";
     window.requestAnimationFrame(() => {
-      document.querySelectorAll(".hero .reveal, .hero .reveal-text").forEach((el) => {
-        el.classList.add("is-visible", "is-lit");
-      });
+      document
+        .querySelectorAll(".hero__panel--opening .reveal, .hero__panel--opening .reveal-text")
+        .forEach((el) => {
+          el.classList.add("is-visible", "is-lit");
+        });
       ensureScrollReveal();
+      setScrollKeyword(SCROLL_KEYWORD_WELCOME);
+      document.querySelector(".scroll-progress")?.classList.add("is-active");
+      updateScrollUi();
     });
   }
 
   function startIntroFlow() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    if (headerVideo) {
+      headerVideo.pause();
+    }
+
     if (reducedMotion || !video) {
       header?.classList.remove("is-intro");
       finishIntro();
+      if (hero) {
+        hero.style.setProperty("--hero-story-darken", "0");
+      }
       return;
     }
 
@@ -65,6 +144,17 @@
 
   startIntroFlow();
 
+  const brandHome = document.querySelector(".brand--center");
+  if (brandHome) {
+    brandHome.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      if (window.history.replaceState) {
+        window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      }
+    });
+  }
+
   if (navToggle && siteNavMobile) {
     navToggle.addEventListener("click", () => {
       const open = siteNavMobile.classList.toggle("is-open");
@@ -79,10 +169,235 @@
     });
   }
 
-  window.addEventListener("scroll", () => {
-    if (!header) return;
-    header.classList.toggle("is-scrolled", window.scrollY > 24);
-  });
+  function setScrollKeyword(text) {
+    activeScrollKeyword = text || "";
+    if (!scrollKeywordEl) return;
+    if (!activeScrollKeyword) {
+      scrollKeywordEl.textContent = "";
+      scrollKeywordEl.classList.remove("is-visible", "scroll-progress__keyword--welcome");
+      return;
+    }
+    if (scrollKeywordEl.textContent !== activeScrollKeyword) {
+      scrollKeywordEl.textContent = activeScrollKeyword;
+    }
+    scrollKeywordEl.classList.toggle(
+      "scroll-progress__keyword--welcome",
+      activeScrollKeyword === SCROLL_KEYWORD_WELCOME
+    );
+    scrollKeywordEl.classList.add("is-visible");
+  }
+
+  function getHeroStoryProgress() {
+    if (!heroStoryScroll) return null;
+
+    const rect = heroStoryScroll.getBoundingClientRect();
+    if (rect.bottom < window.innerHeight * 0.2) return null;
+
+    const scrollable = heroStoryScroll.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return null;
+
+    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
+    if (rect.top > window.innerHeight * 0.92 && traveled <= 0) return null;
+
+    return traveled / scrollable;
+  }
+
+  function resolveHeroStoryBeat(progress) {
+    let beat = HERO_STORY_BEATS[HERO_STORY_BEATS.length - 1];
+    for (let i = 0; i < HERO_STORY_BEATS.length; i += 1) {
+      if (progress <= HERO_STORY_BEATS[i].until) {
+        beat = HERO_STORY_BEATS[i];
+        break;
+      }
+    }
+    return beat;
+  }
+
+  function keywordFromStoryBeat(beat) {
+    if (!beat) return "";
+    if (beat.sub === "für KMU") return "für KMU";
+    if (beat.mega) return beat.mega.replace(/\.$/, "").trim();
+    return "";
+  }
+
+  function updateScrollKeywordLabel() {
+    if (main && main.hidden) return;
+
+    const storyProgress = getHeroStoryProgress();
+    const openingPanel = document.querySelector(".hero__panel--opening");
+    const openingVisible =
+      openingPanel &&
+      openingPanel.getBoundingClientRect().bottom > window.innerHeight * 0.45;
+
+    if (openingVisible && window.scrollY < 160) {
+      setScrollKeyword(SCROLL_KEYWORD_WELCOME);
+      return;
+    }
+
+    if (storyProgress !== null) {
+      const beat = resolveHeroStoryBeat(storyProgress);
+      const storyKeyword = keywordFromStoryBeat(beat);
+      if (storyKeyword) {
+        setScrollKeyword(storyKeyword);
+        return;
+      }
+      if (storyProgress < 0.12) {
+        setScrollKeyword(SCROLL_KEYWORD_WELCOME);
+        return;
+      }
+    }
+
+    if (activeSectionKeyword) {
+      setScrollKeyword(activeSectionKeyword);
+      return;
+    }
+
+    if (window.scrollY < 80) {
+      setScrollKeyword(SCROLL_KEYWORD_WELCOME);
+    }
+  }
+
+  function updateEvolutionScroll() {
+    if (!evolutionScroll || !evolutionReel || !flipbook) return;
+
+    const rect = evolutionScroll.getBoundingClientRect();
+    const scrollable = evolutionScroll.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+
+    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
+    const progress = traveled / scrollable;
+    const frameIndex = Math.min(5, Math.floor(progress * 6));
+    const reelTurns = progress * 720;
+
+    evolutionReel.style.setProperty("--reel-rot", `${reelTurns}deg`);
+
+    flipbook.querySelectorAll(".flipbook__frame").forEach((frame, index) => {
+      frame.classList.toggle("is-active", index === frameIndex);
+    });
+
+    if (evolutionCaption && EVOLUTION_CAPTIONS[frameIndex]) {
+      evolutionCaption.textContent = EVOLUTION_CAPTIONS[frameIndex];
+    }
+  }
+
+  function updateScrollUi() {
+    const atTop = window.scrollY <= SCROLL_BRAND_THRESHOLD;
+    if (header) {
+      header.classList.toggle("is-scrolled", !atTop);
+    }
+
+    if (headerVideo) {
+      if (atTop) {
+        playHeaderVideo();
+      } else {
+        headerVideo.pause();
+      }
+    }
+
+    if (scrollProgressFill) {
+      const root = document.documentElement;
+      const max = root.scrollHeight - root.clientHeight;
+      const progress = max > 0 ? (window.scrollY / max) * 100 : 0;
+      scrollProgressFill.style.height = `${Math.min(100, Math.max(0, progress))}%`;
+      const track = scrollProgressFill.closest(".scroll-progress");
+      if (track && main && !main.hidden) {
+        track.classList.add("is-active");
+      }
+      if (scrollKeywordEl) {
+        scrollKeywordEl.style.setProperty("--keyword-top", `${Math.min(96, Math.max(4, progress))}%`);
+      }
+    }
+
+    updateEvolutionScroll();
+    updateHeroStoryScroll();
+    updateKlarheitEarthScroll();
+    updateHeroStageVisibility();
+    updateScrollKeywordLabel();
+  }
+
+  function updateHeroStageVisibility() {
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    hero.classList.toggle("hero--past-stage", rect.bottom <= window.innerHeight * 0.12);
+  }
+
+  function updateHeroStoryScroll() {
+    if (!heroStoryScroll || !heroStoryMega || !heroStorySub) return;
+
+    const rect = heroStoryScroll.getBoundingClientRect();
+    const scrollable = heroStoryScroll.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+
+    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
+    const progress = traveled / scrollable;
+
+    if (hero) {
+      const darken = Math.min(1, Math.max(0, progress * 1.15));
+      hero.style.setProperty("--hero-story-darken", darken.toFixed(3));
+      hero.classList.toggle("hero--story-dark", progress > 0.04);
+    }
+
+    const beat = resolveHeroStoryBeat(progress);
+
+    if (heroStoryMega.dataset.line !== beat.mega) {
+      heroStoryMega.dataset.line = beat.mega;
+      heroStoryMega.classList.remove("is-lit");
+      heroStoryMega.textContent = beat.mega;
+      if (beat.mega) {
+        window.requestAnimationFrame(() => heroStoryMega.classList.add("is-lit"));
+      }
+    }
+
+    if (heroStorySub.dataset.line !== beat.sub) {
+      heroStorySub.dataset.line = beat.sub;
+      heroStorySub.classList.remove("is-lit");
+      heroStorySub.textContent = beat.sub;
+      if (beat.sub) {
+        window.requestAnimationFrame(() => heroStorySub.classList.add("is-lit"));
+      }
+    }
+  }
+
+  function updateKlarheitEarthScroll() {
+    if (!klarheitScroll || !klarheitEarth) return;
+
+    const rect = klarheitScroll.getBoundingClientRect();
+    const scrollable = klarheitScroll.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+
+    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
+    const progress = traveled / scrollable;
+
+    let scale = 0.22;
+    let opacity = 0.3;
+
+    if (progress < 0.2) {
+      scale = 0.18 + progress * 0.55;
+      opacity = 0.26 + progress * 0.3;
+    } else if (progress < 0.55) {
+      scale = 0.28;
+      opacity = 0.38;
+    } else {
+      const grow = (progress - 0.55) / 0.45;
+      scale = 0.28 + grow * 1.02;
+      opacity = 0.38 + grow * 0.32;
+    }
+
+    klarheitEarth.style.setProperty("--earth-scale", String(scale));
+    klarheitEarth.style.setProperty("--earth-opacity", String(opacity));
+
+    if (klarheitEarthVideo) {
+      const inView = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (inView && progress > 0.05) {
+        if (klarheitEarthVideo.paused) {
+          klarheitEarthVideo.play().catch(() => {});
+        }
+      }
+    }
+  }
+
+  window.addEventListener("scroll", updateScrollUi, { passive: true });
+  updateScrollUi();
 
   placeholderLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -135,10 +450,117 @@
     });
   }
 
+  function initScrollKeywordsAndFocus() {
+    const sections = document.querySelectorAll("[data-scroll-keyword]");
+    if (!sections.length) return;
+
+    const sectionRatios = new Map();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          sectionRatios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+        });
+
+        let bestSection = null;
+        let bestRatio = 0;
+        sections.forEach((section) => {
+          const ratio = sectionRatios.get(section) || 0;
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestSection = section;
+          }
+        });
+
+        sections.forEach((section) => {
+          section.classList.toggle("is-in-focus", section === bestSection && bestRatio > 0.22);
+        });
+
+        if (bestSection && bestRatio > 0.18) {
+          activeSectionKeyword = bestSection.getAttribute("data-scroll-keyword") || "";
+        } else {
+          activeSectionKeyword = "";
+        }
+        updateScrollKeywordLabel();
+      },
+      { threshold: [0, 0.12, 0.22, 0.35, 0.5, 0.65] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  function initAiSparkles() {
+    const container = document.getElementById("ai-sparkles");
+    if (!container) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion || window.matchMedia("(max-width: 960px)").matches) return;
+
+    const sparkleSvg =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#9ee8ff" d="M12 2.5l1.65 5.7L19 10l-5.35 1.8L12 17.5l-1.65-5.7L5 10l5.35-1.8L12 2.5z"/></svg>';
+
+    const count = 7;
+    const particles = [];
+
+    for (let i = 0; i < count; i += 1) {
+      const el = document.createElement("span");
+      el.className = i % 2 === 0 ? "ai-sparkle" : "ai-sparkle ai-sparkle--dim";
+      el.innerHTML = sparkleSvg;
+      container.appendChild(el);
+      particles.push({
+        el,
+        x: window.innerWidth * 0.5,
+        y: window.innerHeight * 0.5,
+        lag: 0.06 + i * 0.018,
+        wobble: i * 0.7,
+      });
+    }
+
+    let targetX = window.innerWidth * 0.5;
+    let targetY = window.innerHeight * 0.5;
+    let rafId = 0;
+    let t = 0;
+
+    document.addEventListener(
+      "mousemove",
+      (event) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+      },
+      { passive: true }
+    );
+
+    function tick() {
+      t += 0.016;
+      particles.forEach((particle, index) => {
+        const wobbleX = Math.sin(t * 2 + particle.wobble) * (8 + index);
+        const wobbleY = Math.cos(t * 1.6 + particle.wobble) * (6 + index);
+        particle.x += (targetX + wobbleX - particle.x) * particle.lag;
+        particle.y += (targetY + wobbleY - particle.y) * particle.lag;
+        particle.el.style.transform = `translate3d(${particle.x}px, ${particle.y}px, 0)`;
+      });
+      rafId = window.requestAnimationFrame(tick);
+    }
+
+    rafId = window.requestAnimationFrame(tick);
+
+    window.addEventListener("beforeunload", () => {
+      window.cancelAnimationFrame(rafId);
+    });
+  }
+
   function ensureScrollReveal() {
     if (scrollRevealReady) return;
     scrollRevealReady = true;
     initScrollReveal();
+    initScrollKeywordsAndFocus();
+  }
+
+  function setRevealState(block, visible) {
+    block.classList.toggle("is-visible", visible);
+    block.querySelectorAll(".reveal-text").forEach((textEl) => {
+      textEl.classList.toggle("is-lit", visible);
+    });
   }
 
   function initScrollReveal() {
@@ -147,30 +569,21 @@
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
-      revealBlocks.forEach((block) => {
-        block.classList.add("is-visible");
-        block.querySelectorAll(".reveal-text").forEach((t) => t.classList.add("is-lit"));
-      });
+      revealBlocks.forEach((block) => setRevealState(block, true));
       return;
     }
 
-    const observer = new IntersectionObserver(
+    const blockObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const block = entry.target;
-          block.classList.add("is-visible");
-          block.querySelectorAll(".reveal-text").forEach((textEl) => {
-            textEl.classList.add("is-lit");
-          });
-          observer.unobserve(block);
+          setRevealState(entry.target, entry.isIntersecting);
         });
       },
-      { root: null, threshold: 0.18, rootMargin: "0px 0px -8% 0px" }
+      { root: null, threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
     );
 
     revealBlocks.forEach((block) => {
-      observer.observe(block);
+      blockObserver.observe(block);
     });
 
     document.querySelectorAll(".reveal-text").forEach((textEl) => {
@@ -178,18 +591,159 @@
         const soloObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-lit");
-                soloObserver.unobserve(entry.target);
-              }
+              entry.target.classList.toggle("is-lit", entry.isIntersecting);
             });
           },
-          { threshold: 0.35 }
+          { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
         );
         soloObserver.observe(textEl);
       }
     });
   }
 
+  function openContactModal() {
+    if (!contactModal) return;
+    contactModal.hidden = false;
+    contactModal.setAttribute("aria-hidden", "false");
+    window.requestAnimationFrame(() => {
+      contactModal.classList.add("is-open");
+    });
+    document.body.style.overflow = "hidden";
+    siteNavMobile?.classList.remove("is-open");
+    navToggle?.setAttribute("aria-expanded", "false");
+    const firstField = contactForm?.querySelector("#contact-name");
+    window.setTimeout(() => firstField?.focus(), 120);
+  }
+
+  function closeContactModal() {
+    if (!contactModal) return;
+    contactModal.classList.remove("is-open");
+    contactModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    window.setTimeout(() => {
+      contactModal.hidden = true;
+    }, 360);
+  }
+
+  function initContactModal() {
+    document.querySelectorAll("[data-contact-open]").forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        openContactModal();
+      });
+    });
+
+    contactModal?.querySelectorAll("[data-contact-close]").forEach((el) => {
+      el.addEventListener("click", closeContactModal);
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && contactModal && !contactModal.hidden) {
+        closeContactModal();
+      }
+    });
+  }
+
+  function initContactForm() {
+    if (!contactForm) return;
+
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = contactForm.querySelector("#contact-name")?.value.trim() || "";
+      const email = contactForm.querySelector("#contact-email")?.value.trim() || "";
+      const message = contactForm.querySelector("#contact-message")?.value.trim() || "";
+      const interests = [...contactForm.querySelectorAll('input[name="interest"]:checked')].map(
+        (input) => input.value
+      );
+      const appointment =
+        contactForm.querySelector("#contact-appointment")?.value.trim() || "";
+
+      if (!name || !email || !message) {
+        contactForm.classList.add("contact-form--shake");
+        window.setTimeout(() => contactForm.classList.remove("contact-form--shake"), 450);
+        return;
+      }
+
+      const subject = encodeURIComponent(`Anfrage über saibot-impulse.de — ${name}`);
+      const bodyLines = [
+        `Name: ${name}`,
+        `E-Mail: ${email}`,
+        "",
+        interests.length ? `Interesse: ${interests.join(", ")}` : "Interesse: (nicht angegeben)",
+        appointment ? `Wunschtermin: ${appointment}` : "",
+        "",
+        message,
+        "",
+        "— Gesendet über das Kontaktformular auf saibot-impulse.de",
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
+      window.location.href = `mailto:kontakt@saibot-impulse.de?subject=${subject}&body=${body}`;
+    });
+  }
+
+  function initKiVisualStack() {
+    const stack = document.getElementById("ki-visual-stack");
+    const caption = document.getElementById("ki-stack-caption");
+    if (!stack) return;
+
+    const cards = Array.from(stack.querySelectorAll(".ki-stack__card"));
+    if (!cards.length) return;
+
+    let order = cards.map((_, index) => index);
+    let timerId = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function applyOrder() {
+      order.forEach((cardIndex, slot) => {
+        cards[cardIndex].dataset.slot = String(slot);
+      });
+      if (caption) {
+        const front = cards[order[0]];
+        caption.textContent = front?.dataset.caption || "";
+      }
+    }
+
+    function rotateStack() {
+      order.push(order.shift());
+      applyOrder();
+    }
+
+    function startRotation() {
+      if (reducedMotion || timerId) return;
+      timerId = window.setInterval(rotateStack, 4200);
+    }
+
+    function stopRotation() {
+      if (!timerId) return;
+      window.clearInterval(timerId);
+      timerId = 0;
+    }
+
+    applyOrder();
+    startRotation();
+
+    stack.addEventListener("mouseenter", stopRotation);
+    stack.addEventListener("mouseleave", startRotation);
+
+    const section = document.getElementById("ki-impuls");
+    if (section && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) startRotation();
+            else stopRotation();
+          });
+        },
+        { threshold: 0.15 }
+      );
+      observer.observe(section);
+    }
+  }
+
   initHeroParallax();
+  initAiSparkles();
+  initKiVisualStack();
+  initContactModal();
+  initContactForm();
 })();
