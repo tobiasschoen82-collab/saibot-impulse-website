@@ -16,10 +16,9 @@ window.SAIBOT_SITE = {
   },
   visitorCounter: {
     enabled: true,
-    /** CountAPI — Namespace/Key frei wählbar; später durch eigene URL ersetzbar */
-    provider: "countapi",
-    namespace: "saibot-impulse-de",
-    key: "website-visits",
+    /** Nachfolger von countapi.xyz — öffentlicher Zähler-Key, siehe Datenschutz */
+    provider: "countapi-v2",
+    key: "saibot-impulse-de-website-visits",
     /** Später: endpoint: "https://ihr-backend.de/api/visitors" */
     endpoint: null,
   },

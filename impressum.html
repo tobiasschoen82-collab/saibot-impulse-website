@@ -4,29 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Impressum · sAIbot Impulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
-<body>
-  <header class="site-header is-scrolled">
-    <div class="wrap site-header__inner">
-      <a class="brand" href="index.html">
-        <img src="assets/logo-white.png" alt="sAIbot Impulse" width="160" height="48" class="brand__logo">
+<body class="legal-body">
+  <header class="site-header site-header--legal is-scrolled" id="top">
+    <div class="site-header__bar">
+      <nav class="site-nav site-nav--left site-nav--legal" aria-label="Zurück">
+        <a class="site-nav__back" href="index.html">← Startseite</a>
+      </nav>
+      <a class="brand brand--center" href="index.html" aria-label="sAIbot Impulse Start">
+        <span class="brand__wordmark brand__wordmark--solo">
+          <span class="brand__name-light">s<span class="brand-ai">AI</span>bot</span><span class="brand__impulse"> Impulse</span>
+        </span>
       </a>
+      <nav class="site-nav site-nav--right site-nav--legal" aria-label="Rechtliches">
+        <a href="impressum.html" aria-current="page">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </nav>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav-mobile">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+  <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
+    <a href="index.html">← Startseite</a>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+  </nav>
   <main class="legal-page">
     <div class="wrap">
-      <a class="legal-back" href="index.html">← Zurück zur Startseite</a>
+      <a class="legal-back legal-back--prominent btn btn--ghost btn--sm" href="index.html">← Zurück zur Startseite</a>
       <h1>Impressum</h1>
       <p><strong>Bitte ergänzen Sie diese Angaben vor dem Live-Gang</strong> (Pflicht nach § 5 TMG).</p>
 
       <h2>Angaben gemäß § 5 TMG</h2>
       <p>
-        [Vorname Nachname]<br>
+        [Vor- und Nachname]<br>
         [Straße Hausnummer]<br>
-        [PLZ Ort]<br>
-        Deutschland
+        [PLZ Ort]
       </p>
 
       <h2>Kontakt</h2>
@@ -36,10 +55,16 @@
       </p>
 
       <h2>Umsatzsteuer-ID</h2>
-      <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>[USt-IdNr. oder „nicht vorhanden“]</p>
+      <p>
+        Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br>
+        [falls vorhanden, sonst entfernen]
+      </p>
 
       <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-      <p>[Name und Anschrift wie oben]</p>
+      <p>
+        [Name]<br>
+        [Anschrift wie oben]
+      </p>
 
       <h2>EU-Streitschlichtung</h2>
       <p>
@@ -48,18 +73,22 @@
         Unsere E-Mail-Adresse finden Sie oben im Impressum.
       </p>
 
-      <h2>Verbraucherstreitbeilegung</h2>
-      <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      <h2>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
+      <p>
+        Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+      </p>
     </div>
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
-      <nav class="site-footer__legal">
+      <img src="assets/logo-white.png" alt="" class="site-footer__logo" width="120" height="36" loading="lazy">
+      <nav class="site-footer__legal" aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
       </nav>
       <p class="site-footer__copy">© sAIbot Impulse</p>
     </div>
   </footer>
+  <script src="js/legal-nav.js"></script>
 </body>
 </html>

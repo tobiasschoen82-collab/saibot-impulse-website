@@ -4,20 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datenschutz · sAIbot Impulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
-<body>
-  <header class="site-header is-scrolled">
-    <div class="wrap site-header__inner">
-      <a class="brand" href="index.html">
-        <img src="assets/logo-white.png" alt="sAIbot Impulse" width="160" height="48" class="brand__logo">
+<body class="legal-body">
+  <header class="site-header site-header--legal is-scrolled" id="top">
+    <div class="site-header__bar">
+      <nav class="site-nav site-nav--left site-nav--legal" aria-label="Zurück">
+        <a class="site-nav__back" href="index.html">← Startseite</a>
+      </nav>
+      <a class="brand brand--center" href="index.html" aria-label="sAIbot Impulse Start">
+        <span class="brand__wordmark brand__wordmark--solo">
+          <span class="brand__name-light">s<span class="brand-ai">AI</span>bot</span><span class="brand__impulse"> Impulse</span>
+        </span>
       </a>
+      <nav class="site-nav site-nav--right site-nav--legal" aria-label="Rechtliches">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html" aria-current="page">Datenschutz</a>
+      </nav>
+      <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav-mobile">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+  <nav class="site-nav site-nav--mobile" id="site-nav-mobile" aria-label="Mobile Navigation">
+    <a href="index.html">← Startseite</a>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+  </nav>
   <main class="legal-page">
     <div class="wrap">
-      <a class="legal-back" href="index.html">← Zurück zur Startseite</a>
+      <a class="legal-back legal-back--prominent btn btn--ghost btn--sm" href="index.html">← Zurück zur Startseite</a>
       <h1>Datenschutzerklärung</h1>
       <p>
         Diese Seite ist bewusst schlank gehalten. <strong>Bitte lassen Sie den Text vor Veröffentlichung prüfen</strong>
@@ -42,10 +62,10 @@
         <a href="https://www.ionos.de/terms-gtc/datenschutzerklaerung/" target="_blank" rel="noopener noreferrer">Datenschutzhinweise IONOS</a>.
       </p>
 
-      <h2>3. Keine Tracking-Tools (Stand Entwurf)</h2>
+      <h2>3. Keine Analyse-Cookies (Stand Entwurf)</h2>
       <p>
-        In der aktuellen Version sind keine Analyse- oder Marketing-Cookies eingebunden. Wenn Sie später
-        z. B. Google Analytics oder eingebettete Videos hinzufügen, muss diese Erklärung ergänzt werden.
+        Es sind keine klassischen Analyse- oder Marketing-Cookies eingebunden. Wenn Sie später
+        z. B. Google Analytics hinzufügen, muss diese Erklärung ergänzt werden.
       </p>
 
       <h2>4. Schriftarten</h2>
@@ -54,7 +74,19 @@
         Wenn Sie maximale Datensparsamkeit wünschen, können die Schriftarten lokal eingebunden werden.
       </p>
 
-      <h2>5. Ihre Rechte</h2>
+      <h2>5. Besucherzähler in der Fußzeile (optional)</h2>
+      <p>
+        Auf der Startseite kann ein <strong>aggregierter Aufrufzähler</strong> angezeigt werden. Technisch wird dafür
+        der Dienst <strong>CountAPI</strong> (Nachfolger unter
+        <a href="https://countapi.mileshilliard.com/" target="_blank" rel="noopener noreferrer">countapi.mileshilliard.com</a>)
+        genutzt: Beim ersten Aufruf pro Browser-Tab wird ein Zähler erhöht, die Gesamtzahl wird angezeigt.
+        Dabei wird eine Anfrage an Server des Anbieters gesendet (kein Cookie auf Ihrer Seite, aber Drittland-/Drittanbieter-Zugriff möglich).
+        Rechtsgrundlage wäre typischerweise Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer groben Reichweiten-Einschätzung)
+        — bitte mit Ihrer Datenschutzberatung abstimmen. Werden Adblocker genutzt oder ist der Dienst nicht erreichbar,
+        erscheint kein Wert („—“).
+      </p>
+
+      <h2>6. Ihre Rechte</h2>
       <p>
         Sie haben Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit
         sowie Beschwerde bei einer Aufsichtsbehörde.
@@ -63,12 +95,14 @@
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
-      <nav class="site-footer__legal">
+      <img src="assets/logo-white.png" alt="" class="site-footer__logo" width="120" height="36" loading="lazy">
+      <nav class="site-footer__legal" aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
       </nav>
       <p class="site-footer__copy">© sAIbot Impulse</p>
     </div>
   </footer>
+  <script src="js/legal-nav.js"></script>
 </body>
 </html>
