@@ -246,7 +246,10 @@ h3.reveal-text.is-lit,
 .intro__video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-height: 100vh;
+  object-fit: contain;
+  object-position: center 32%;
+  background: #000;
 }
 
 .intro__veil {
@@ -256,10 +259,52 @@ h3.reveal-text.is-lit,
   pointer-events: none;
 }
 
+.intro__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(10, 15, 22, 0.88);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.intro__sound {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 2;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(10, 15, 22, 0.75);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.intro__sound[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--border-strong);
+}
+
 .intro__skip {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
+  z-index: 2;
   font-family: var(--font-body);
   font-size: 0.85rem;
   letter-spacing: 0.06em;
