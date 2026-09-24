@@ -994,7 +994,10 @@
 
     let order = cards.map((_, index) => index);
     let timerId = 0;
+    let resumeTimerId = 0;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const AUTO_MS = 2800;
+    const RESUME_AFTER_CLICK_MS = 3200;
 
     function applyOrder() {
       order.forEach((cardIndex, slot) => {
@@ -1006,14 +1009,29 @@
       }
     }
 
-    function rotateStack() {
+    function pulseFlip() {
+      stack.classList.remove("ki-stack--flip");
+      void stack.offsetWidth;
+      stack.classList.add("ki-stack--flip");
+      window.setTimeout(() => stack.classList.remove("ki-stack--flip"), 480);
+    }
+
+    function rotateStack(fromUser) {
       order.push(order.shift());
       applyOrder();
+      if (!reducedMotion) {
+        pulseFlip();
+      }
+      if (fromUser) {
+        stopRotation();
+        window.clearTimeout(resumeTimerId);
+        resumeTimerId = window.setTimeout(startRotation, RESUME_AFTER_CLICK_MS);
+      }
     }
 
     function startRotation() {
       if (reducedMotion || timerId) return;
-      timerId = window.setInterval(rotateStack, 4200);
+      timerId = window.setInterval(() => rotateStack(false), AUTO_MS);
     }
 
     function stopRotation() {
@@ -1022,11 +1040,26 @@
       timerId = 0;
     }
 
+    function onUserActivate(event) {
+      event.preventDefault();
+      rotateStack(true);
+    }
+
     applyOrder();
     startRotation();
 
+    stack.addEventListener("click", onUserActivate);
+    stack.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        onUserActivate(event);
+      }
+    });
+
     stack.addEventListener("mouseenter", stopRotation);
-    stack.addEventListener("mouseleave", startRotation);
+    stack.addEventListener("mouseleave", () => {
+      window.clearTimeout(resumeTimerId);
+      startRotation();
+    });
 
     const section = document.getElementById("ki-impuls");
     if (section && "IntersectionObserver" in window) {
@@ -1043,10 +1076,37 @@
     }
   }
 
+  function initSurfaceCards() {
+    const cards = document.querySelectorAll(".surface-card");
+    if (!cards.length) return;
+
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    cards.forEach((card) => {
+      card.addEventListener("pointerenter", () => card.classList.add("is-hovered"));
+      card.addEventListener("pointerleave", () => {
+        card.classList.remove("is-hovered");
+        card.style.removeProperty("--surface-glow-x");
+        card.style.removeProperty("--surface-glow-y");
+      });
+
+      if (!finePointer) return;
+
+      card.addEventListener("pointermove", (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty("--surface-glow-x", `${x}%`);
+        card.style.setProperty("--surface-glow-y", `${y}%`);
+      });
+    });
+  }
+
   initEvolutionVideo();
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();
+  initSurfaceCards();
   initKlarheitEarthVideo();
   initContactModal();
   initContactForm();

@@ -122,17 +122,17 @@
           </p>
         </header>
         <div class="philosophy-grid">
-          <article class="philosophy-card reveal reveal--from-left">
+          <article class="philosophy-card surface-card reveal reveal--from-left">
             <span class="philosophy-card__icon" aria-hidden="true">☕</span>
             <h3 class="reveal-text">Gemeinsam statt solo</h3>
             <p>KI nutzen wir im Team — im Raum, nicht verstreut in Homeoffice-Schachteln. Ideen entstehen nebeneinander.</p>
           </article>
-          <article class="philosophy-card reveal reveal--from-below">
+          <article class="philosophy-card surface-card reveal reveal--from-below">
             <span class="philosophy-card__icon" aria-hidden="true">◎</span>
             <h3 class="reveal-text">Der Mensch entscheidet</h3>
             <p>Automatisierung dort, wo sie entlastet — nicht dort, wo sie Nähe ersetzt. Was persönlich bleiben soll, bleibt bewusst persönlich.</p>
           </article>
-          <article class="philosophy-card reveal reveal--from-right">
+          <article class="philosophy-card surface-card reveal reveal--from-right">
             <span class="philosophy-card__icon" aria-hidden="true">✦</span>
             <h3 class="reveal-text">Zeit zurückgewinnen</h3>
             <p>Weniger Routine am Bildschirm heißt: öfter anklopfen, anrufen, vorbeigehen — bei Mitarbeitenden wie bei Kunden.</p>
@@ -203,7 +203,7 @@
           </p>
         </header>
         <div class="cards cards--3">
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◈</div>
             <h3 class="reveal-text">KI-Beratung &amp; Use Cases</h3>
             <p>
@@ -212,7 +212,7 @@
               echte Gespräche bleibt. Auf Augenhöhe, ohne Fachchinesisch.
             </p>
           </article>
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◇</div>
             <h3 class="reveal-text">Eigene Programme mit KI</h3>
             <p>
@@ -220,7 +220,7 @@
               mit moderner KI-Unterstützung in der Entwicklung — transparent, iterativ, bezahlbar für KMU.
             </p>
           </article>
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◆</div>
             <h3 class="reveal-text">Chancen, Risiken &amp; Datenschutz</h3>
             <p class="reveal-text">
@@ -231,7 +231,7 @@
           </article>
         </div>
         <div class="cards cards--3 cards--follow">
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">▣</div>
             <h3 class="reveal-text">Webauftritt &amp; digitale Visitenkarte</h3>
             <p>
@@ -239,7 +239,7 @@
               brauchen, ohne Agentur-Budget. Ein Baustein neben Ihrer KI-Strategie, nicht das ganze Programm.
             </p>
           </article>
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">◎</div>
             <h3 class="reveal-text">Workflows reparieren &amp; verbessern</h3>
             <p>
@@ -247,7 +247,7 @@
               Prozesse wieder in Gang — praxisnah statt Buzzword-Bingo.
             </p>
           </article>
-          <article class="card card--lift reveal reveal--from-below">
+          <article class="card card--lift surface-card reveal reveal--from-below">
             <div class="card__icon" aria-hidden="true">✦</div>
             <h3 class="reveal-text">Eigenes Produkt: s<span class="brand-ai">AI</span>bot Impulse</h3>
             <p class="reveal-text">
@@ -262,21 +262,30 @@
     <section id="ki-impuls" class="section section--tone-mid section--focusable" data-scroll-keyword="Verstehen">
       <div class="wrap ki-spotlight">
         <div class="ki-spotlight__visual reveal reveal--from-below">
-          <div class="ki-stack" id="ki-visual-stack" aria-live="polite">
-            <figure class="ki-stack__card" data-slot="0" data-caption="sAIbot Impulse · Ihre Marke">
-              <img src="assets/hero-texture.png" alt="" loading="lazy" width="720" height="480">
+          <div
+            class="ki-stack"
+            id="ki-visual-stack"
+            role="button"
+            tabindex="0"
+            aria-live="polite"
+            aria-label="Bildstapel: Klicken oder tippen für das nächste Motiv"
+          >
+            <figure class="ki-stack__card" data-slot="0" data-caption="1 · Staunen — Was kann KI heute?">
+              <img src="assets/ki-story-staunen.jpg" alt="Abstrakte KI-Visualisierung, Neugier wecken" loading="lazy" width="720" height="480">
             </figure>
-            <figure class="ki-stack__card" data-slot="1" data-caption="Jetzt · Warum KI">
-              <img src="assets/ki-why-now.jpg" alt="" loading="lazy" width="720" height="480">
+            <figure class="ki-stack__card" data-slot="1" data-caption="2 · Einordnen — Gemeinsam verstehen">
+              <img src="assets/ki-story-team.jpg" alt="Team im Gespräch am Tisch" loading="lazy" width="720" height="480">
             </figure>
-            <figure class="ki-stack__card" data-slot="2" data-caption="Neugier · Vernetztes Denken">
-              <img src="assets/ki-neural.jpg" alt="" loading="lazy" width="720" height="480">
+            <figure class="ki-stack__card" data-slot="2" data-caption="3 · Priorisieren — Use Cases wählen">
+              <img src="assets/ki-story-usecases.jpg" alt="Workshop, Ideen sortieren" loading="lazy" width="720" height="480">
             </figure>
-            <figure class="ki-stack__card" data-slot="3" data-caption="Möglichkeiten · Vertrauen">
-              <img src="assets/ki-trust.jpg" alt="" loading="lazy" width="720" height="480">
+            <figure class="ki-stack__card" data-slot="3" data-caption="4 · Pilot — Konkret starten">
+              <img src="assets/ki-story-pilot.jpg" alt="Laptop mit Auswertung, erster Schritt" loading="lazy" width="720" height="480">
             </figure>
           </div>
-          <p class="ki-stack__caption" id="ki-stack-caption">sAIbot Impulse · Ihre Marke</p>
+          <p class="ki-stack__caption" id="ki-stack-caption">1 · Staunen — Was kann KI heute?</p>
+          <p class="ki-stack__hint">Tippen oder klicken · wechselt automatisch</p>
+          <p class="ki-stack__credit">Fotos: Unsplash (freie Nutzung)</p>
         </div>
         <div class="ki-spotlight__text reveal reveal--from-below">
           <p class="eyebrow reveal-text">Warum KI jetzt</p>
@@ -371,12 +380,12 @@
           </p>
         </header>
         <div class="blocks">
-          <div class="block-preview block-preview--hero reveal reveal--from-below"><span class="reveal-text">KI-Impuls · Hero</span></div>
-          <div class="block-preview block-preview--split reveal reveal--from-below"><span class="reveal-text">Use Case · Story</span></div>
-          <div class="block-preview block-preview--cards reveal reveal--from-below"><span class="reveal-text">Leistungs-Karten</span></div>
-          <div class="block-preview block-preview--cta reveal reveal--from-below"><span class="reveal-text">Vertrauen · Kontakt</span></div>
-          <div class="block-preview block-preview--gallery reveal reveal--from-below"><span class="reveal-text">Referenzen</span></div>
-          <div class="block-preview block-preview--faq reveal reveal--from-below"><span class="reveal-text">FAQ · Datenschutz-Hinweise</span></div>
+          <div class="block-preview surface-card block-preview--hero reveal reveal--from-below"><span class="reveal-text">KI-Impuls · Hero</span></div>
+          <div class="block-preview surface-card block-preview--split reveal reveal--from-below"><span class="reveal-text">Use Case · Story</span></div>
+          <div class="block-preview surface-card block-preview--cards reveal reveal--from-below"><span class="reveal-text">Leistungs-Karten</span></div>
+          <div class="block-preview surface-card block-preview--cta reveal reveal--from-below"><span class="reveal-text">Vertrauen · Kontakt</span></div>
+          <div class="block-preview surface-card block-preview--gallery reveal reveal--from-below"><span class="reveal-text">Referenzen</span></div>
+          <div class="block-preview surface-card block-preview--faq reveal reveal--from-below"><span class="reveal-text">FAQ · Datenschutz-Hinweise</span></div>
         </div>
         <p class="blocks__note">
           Im Gespräch klären wir, ob der nächste Schritt eher KI-Beratung, ein kleines Programm oder ein Webauftritt ist —
