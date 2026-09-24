@@ -21,8 +21,13 @@
   const evolutionCaption = document.getElementById("evolution-caption");
   const evolutionEra = document.getElementById("evolution-era");
   let evolutionVideoDuration = 0;
-  let evolutionVideoTarget = 0;
-  let evolutionVideoSyncRaf = 0;
+  let evolutionScrubRaf = 0;
+  let evolutionInView = false;
+  let evolutionScrollStartY = 0;
+  let evolutionScrollRange = 1;
+  let evolutionSeekPending = null;
+  let evolutionSeekInFlight = false;
+  let evolutionSeekFallbackId = 0;
   const heroStoryScroll = document.getElementById("hero-story-scroll");
   const heroStoryMega = document.getElementById("hero-story-mega");
   const heroStorySub = document.getElementById("hero-story-sub");
@@ -133,6 +138,7 @@
       ensureScrollReveal();
       setScrollKeyword(SCROLL_KEYWORD_WELCOME);
       document.querySelector(".scroll-progress")?.classList.add("is-active");
+      measureEvolutionScroll();
       updateScrollUi();
     });
   }
@@ -409,18 +415,16 @@
     }
   }
 
-  function getEvolutionProgress() {
-    if (!evolutionScroll) return 0;
-    const rect = evolutionScroll.getBoundingClientRect();
-    const scrollable = evolutionScroll.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return 0;
-    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
-    return traveled / scrollable;
+  function measureEvolutionScroll() {
+    if (!evolutionScroll) return;
+    evolutionScrollStartY = evolutionScroll.getBoundingClientRect().top + window.scrollY;
+    evolutionScrollRange = Math.max(1, evolutionScroll.offsetHeight - window.innerHeight);
   }
 
-  /** Scroll 0–1 → Video 0–1 (linear, damit Vor/Zurück ohne Sprünge mitläuft) */
-  function mapScrollToVideoProgress(scrollProgress) {
-    return Math.min(1, Math.max(0, scrollProgress));
+  function getEvolutionProgress() {
+    if (!evolutionScroll || evolutionScrollRange <= 0) return 0;
+    const traveled = window.scrollY - evolutionScrollStartY;
+    return Math.min(1, Math.max(0, traveled / evolutionScrollRange));
   }
 
   function getEvolutionEraIndex(scrollProgress) {
@@ -434,37 +438,7 @@
     return EVOLUTION_ERAS.length - 1;
   }
 
-  function syncEvolutionVideoToScroll() {
-    evolutionVideoSyncRaf = 0;
-    if (!evolutionVideo || evolutionVideoDuration <= 0) return;
-
-    const targetTime = evolutionVideoTarget * evolutionVideoDuration;
-    const current = evolutionVideo.currentTime;
-    if (Math.abs(current - targetTime) < 0.012) return;
-
-    if (typeof evolutionVideo.fastSeek === "function") {
-      try {
-        evolutionVideo.fastSeek(targetTime);
-        return;
-      } catch {
-        /* fallback */
-      }
-    }
-
-    try {
-      evolutionVideo.currentTime = targetTime;
-    } catch {
-      /* ignore seek errors (z. B. während Decoding) */
-    }
-  }
-
-  function requestEvolutionVideoSync() {
-    if (!evolutionVideoSyncRaf) {
-      evolutionVideoSyncRaf = window.requestAnimationFrame(syncEvolutionVideoToScroll);
-    }
-  }
-
-  function applyEvolutionProgress(progress) {
+  function updateEvolutionCopy(progress) {
     const clamped = Math.min(1, Math.max(0, progress));
     const era = EVOLUTION_ERAS[getEvolutionEraIndex(clamped)];
 
@@ -474,14 +448,112 @@
     if (evolutionCaption && evolutionCaption.textContent !== era.text) {
       evolutionCaption.textContent = era.text;
     }
-
-    evolutionVideoTarget = mapScrollToVideoProgress(clamped);
-    requestEvolutionVideoSync();
   }
 
-  function updateEvolutionScroll() {
-    if (!evolutionScroll) return;
-    applyEvolutionProgress(getEvolutionProgress());
+  function clearEvolutionSeekFallback() {
+    if (evolutionSeekFallbackId) {
+      window.clearTimeout(evolutionSeekFallbackId);
+      evolutionSeekFallbackId = 0;
+    }
+  }
+
+  function scheduleEvolutionSeekFallback() {
+    clearEvolutionSeekFallback();
+    evolutionSeekFallbackId = window.setTimeout(() => {
+      evolutionSeekFallbackId = 0;
+      if (!evolutionSeekInFlight) return;
+      evolutionSeekInFlight = false;
+      if (evolutionSeekPending !== null) {
+        flushEvolutionSeek();
+      }
+    }, 100);
+  }
+
+  function flushEvolutionSeek() {
+    if (!evolutionVideo || evolutionVideoDuration <= 0) {
+      evolutionSeekInFlight = false;
+      evolutionSeekPending = null;
+      clearEvolutionSeekFallback();
+      return;
+    }
+    if (evolutionSeekPending === null) {
+      evolutionSeekInFlight = false;
+      clearEvolutionSeekFallback();
+      return;
+    }
+
+    const targetTime = evolutionSeekPending;
+    evolutionSeekPending = null;
+    const safeTime = Math.min(
+      Math.max(0, targetTime),
+      Math.max(0, evolutionVideoDuration - 0.04)
+    );
+
+    if (Math.abs(evolutionVideo.currentTime - safeTime) < 0.0005) {
+      evolutionSeekInFlight = false;
+      clearEvolutionSeekFallback();
+      if (evolutionSeekPending !== null) {
+        flushEvolutionSeek();
+      }
+      return;
+    }
+
+    evolutionSeekInFlight = true;
+    scheduleEvolutionSeekFallback();
+    try {
+      evolutionVideo.currentTime = safeTime;
+    } catch {
+      evolutionSeekInFlight = false;
+      clearEvolutionSeekFallback();
+      if (evolutionSeekPending !== null) {
+        flushEvolutionSeek();
+      }
+    }
+  }
+
+  function queueEvolutionSeek(targetTime) {
+    evolutionSeekPending = targetTime;
+    if (!evolutionSeekInFlight) {
+      flushEvolutionSeek();
+    }
+  }
+
+  function tickEvolutionScrub() {
+    if (!evolutionInView) {
+      evolutionScrubRaf = 0;
+      return;
+    }
+
+    const progress = getEvolutionProgress();
+    if (evolutionVideoDuration > 0) {
+      queueEvolutionSeek(progress * evolutionVideoDuration);
+    }
+    updateEvolutionCopy(progress);
+
+    evolutionScrubRaf = window.requestAnimationFrame(tickEvolutionScrub);
+  }
+
+  function startEvolutionScrub() {
+    if (!evolutionScrubRaf) {
+      evolutionScrubRaf = window.requestAnimationFrame(tickEvolutionScrub);
+    }
+  }
+
+  function stopEvolutionScrub() {
+    if (evolutionScrubRaf) {
+      window.cancelAnimationFrame(evolutionScrubRaf);
+      evolutionScrubRaf = 0;
+    }
+  }
+
+  function setEvolutionInView(inView) {
+    evolutionInView = inView;
+    if (inView) {
+      measureEvolutionScroll();
+      startEvolutionScrub();
+    } else {
+      stopEvolutionScrub();
+    }
   }
 
   function initEvolutionVideo() {
@@ -490,19 +562,31 @@
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
       evolutionVideo.pause();
-      applyEvolutionProgress(0);
+      queueEvolutionSeek(0);
+      updateEvolutionCopy(0);
       return;
     }
 
     evolutionVideo.pause();
+    evolutionVideo.playsInline = true;
     evolutionVideo.removeAttribute("controls");
     evolutionVideo.setAttribute("preload", "auto");
+
+    evolutionVideo.addEventListener("seeked", () => {
+      evolutionSeekInFlight = false;
+      clearEvolutionSeekFallback();
+      if (evolutionSeekPending !== null) {
+        flushEvolutionSeek();
+      }
+    });
 
     const onReady = () => {
       if (Number.isFinite(evolutionVideo.duration) && evolutionVideo.duration > 0) {
         evolutionVideoDuration = evolutionVideo.duration;
-        updateEvolutionScroll();
-        requestEvolutionVideoSync();
+        measureEvolutionScroll();
+        const progress = getEvolutionProgress();
+        queueEvolutionSeek(progress * evolutionVideoDuration);
+        updateEvolutionCopy(progress);
       }
     };
 
@@ -511,10 +595,26 @@
       onReady();
     }
 
+    window.addEventListener("resize", measureEvolutionScroll, { passive: true });
+    measureEvolutionScroll();
+
+    if (evolutionScroll && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            setEvolutionInView(entry.isIntersecting);
+          });
+        },
+        { threshold: 0 }
+      );
+      observer.observe(evolutionScroll);
+    } else {
+      setEvolutionInView(true);
+    }
+
     window.addEventListener("beforeunload", () => {
-      if (evolutionVideoSyncRaf) {
-        window.cancelAnimationFrame(evolutionVideoSyncRaf);
-      }
+      stopEvolutionScrub();
+      clearEvolutionSeekFallback();
     });
   }
 
@@ -546,7 +646,6 @@
       }
     }
 
-    updateEvolutionScroll();
     updateHeroStoryScroll();
     updateKlarheitEarthScroll();
     updateHeroStageVisibility();

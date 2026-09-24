@@ -3,3 +3,4 @@ Desktop.ini
 .DS_Store
 *.log
 assets/_originals/
+node_modules/
