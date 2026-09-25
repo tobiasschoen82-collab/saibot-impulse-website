@@ -751,6 +751,32 @@
     klarheitEarth.style.setProperty("--earth-opacity", String(opacity));
   }
 
+  function measurePhilosophyVideoAnchor() {
+    if (!philosophyVideoLayer || !philosophyStage) return;
+
+    if (!window.matchMedia("(max-width: 960px)").matches) {
+      philosophyVideoLayer.style.removeProperty("--philosophy-video-top");
+      return;
+    }
+
+    const sticky = philosophyVideoLayer.closest(".philosophy-sticky");
+    const h2 = philosophyStage.querySelector(".section__head h2");
+    const sub = philosophyStage.querySelector(".section__head .section__sub");
+    if (!sticky || !h2 || !sub) return;
+
+    const stickyRect = sticky.getBoundingClientRect();
+    const h2Rect = h2.getBoundingClientRect();
+    const subRect = sub.getBoundingClientRect();
+    const bandTop = h2Rect.top;
+    const bandBottom = subRect.bottom;
+    const anchorCenter = bandTop + (bandBottom - bandTop) * 0.5 - stickyRect.top;
+
+    philosophyVideoLayer.style.setProperty(
+      "--philosophy-video-top",
+      `${Math.round(Math.max(88, anchorCenter))}px`
+    );
+  }
+
   function updatePhilosophyScroll() {
     if (!philosophyScroll || !philosophyVideoLayer) return;
 
@@ -837,6 +863,9 @@
   }
 
   window.addEventListener("scroll", updateScrollUi, { passive: true });
+  window.addEventListener("resize", measurePhilosophyVideoAnchor, { passive: true });
+  window.addEventListener("load", measurePhilosophyVideoAnchor);
+  measurePhilosophyVideoAnchor();
   updateScrollUi();
 
   placeholderLinks.forEach((link) => {

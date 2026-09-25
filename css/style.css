@@ -2966,7 +2966,7 @@ html:has(.intro:not(.is-done)) body {
   .section--philosophy .philosophy-video-layer {
     inset: auto;
     left: 50%;
-    top: 46%;
+    top: var(--philosophy-video-top, 11.5rem);
     width: min(78vw, 300px);
     height: min(42dvh, 240px);
     max-width: 300px;
