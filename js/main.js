@@ -496,8 +496,9 @@
 
   function getEvolutionEraIndex(scrollProgress) {
     const p = Math.min(1, Math.max(0, scrollProgress));
-    for (let i = 0; i < EVOLUTION_TEXT_BANDS.length; i += 1) {
-      const band = EVOLUTION_TEXT_BANDS[i];
+    const bands = getEvolutionTextBands();
+    for (let i = 0; i < bands.length; i += 1) {
+      const band = bands[i];
       if (p >= band.start && p < band.end) {
         return band.eraIndex;
       }

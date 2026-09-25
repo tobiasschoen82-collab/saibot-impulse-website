@@ -2929,6 +2929,21 @@ html:has(.intro:not(.is-done)) body {
     height: 100%;
   }
 
+  .site-header.is-scrolled .brand--center {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 2.85rem 2.65rem;
+    box-sizing: border-box;
+  }
+
+  .site-header.is-scrolled .brand__wordmark {
+    justify-content: center;
+    width: 100%;
+    font-size: clamp(0.92rem, 3.8vw, 1.08rem);
+  }
+
   .brand__logo-video {
     max-width: min(168px, 38vw);
     max-height: calc(var(--header-h) - 1rem);
@@ -2940,6 +2955,13 @@ html:has(.intro:not(.is-done)) body {
     grid-column: 2;
     grid-row: 1;
     justify-self: end;
+    position: relative;
+    z-index: 2;
+  }
+
+  .site-header.is-scrolled .nav-toggle {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .scroll-progress {
