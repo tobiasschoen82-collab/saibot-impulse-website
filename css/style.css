@@ -2963,26 +2963,34 @@ html:has(.intro:not(.is-done)) body {
     background: #06080c;
   }
 
-  .philosophy-video-layer {
+  .section--philosophy .philosophy-video-layer {
     inset: auto;
     left: 50%;
-    top: 50%;
-    width: 100%;
-    height: calc(100dvh - var(--header-h));
-    max-height: calc(100dvh - var(--header-h));
+    top: 46%;
+    width: min(78vw, 300px);
+    height: min(42dvh, 240px);
+    max-width: 300px;
+    max-height: min(42dvh, 240px);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(77, 201, 255, 0.12),
+      0 12px 48px rgba(0, 0, 0, 0.45);
     transform: translate(-50%, -50%) translateY(var(--philosophy-video-y, 0px))
       scale(var(--philosophy-video-scale, 1));
     transform-origin: center center;
   }
 
-  .philosophy-video-layer__video {
+  .section--philosophy .philosophy-video-layer__video {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     object-position: center center;
   }
 
-  .philosophy-video-layer__veil {
-    background:
-      linear-gradient(180deg, rgba(6, 8, 12, 0.15) 0%, transparent 35%, transparent 65%, rgba(6, 8, 12, 0.35) 100%);
+  .section--philosophy .philosophy-video-layer__veil {
+    background: linear-gradient(180deg, rgba(6, 8, 12, 0.08), rgba(6, 8, 12, 0.22));
     pointer-events: none;
   }
 

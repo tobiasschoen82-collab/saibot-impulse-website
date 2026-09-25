@@ -775,7 +775,7 @@
 
     const scrollable = philosophyScroll.offsetHeight - window.innerHeight;
     const isMobile = window.matchMedia("(max-width: 960px)").matches;
-    const scaleEnd = isMobile ? 0.38 : 0.24;
+    const scaleEnd = isMobile ? 0.52 : 0.24;
     const videoOpacityEnd = isMobile ? 0.34 : 0.26;
 
     if (scrollable <= 0) {
@@ -799,8 +799,8 @@
     let shrinkPhase;
 
     if (isMobile) {
-      const shrinkStart = 0.22;
-      const shrinkEnd = 0.78;
+      const shrinkStart = 0.18;
+      const shrinkEnd = 0.72;
       videoY = 0;
 
       if (progress < shrinkStart) {
@@ -816,7 +816,7 @@
       }
 
       videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
-      contentOpacity = Math.min(1, Math.max(0, (progress - 0.5) / 0.38));
+      contentOpacity = Math.min(1, Math.max(0, (progress - 0.48) / 0.4));
     } else {
       shrinkPhase = Math.min(1, progress / 0.68);
       scale = 1 + (scaleEnd - 1) * shrinkPhase;
