@@ -2876,25 +2876,35 @@ html:has(.intro:not(.is-done)) body {
     font-size: 0.92rem;
   }
 
+  .scroll-progress {
+    overflow: visible;
+  }
+
   .scroll-progress__keyword {
     display: block;
-    left: calc(100% + 0.28rem);
-    max-width: 4.5rem;
-    font-size: 0.62rem;
-    letter-spacing: 0.07em;
-    line-height: 1.22;
+    left: calc(100% + 0.35rem);
+    max-width: none;
+    width: max-content;
+    max-width: min(72vw, 16.5rem);
+    font-size: 0.64rem;
+    letter-spacing: 0.045em;
+    line-height: 1.28;
     white-space: normal;
-    text-wrap: balance;
+    text-wrap: pretty;
     overflow: visible;
-    z-index: 91;
+    z-index: 120;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .scroll-progress__keyword--welcome {
-    max-width: 7.25rem;
+    max-width: min(78vw, 12.5rem);
+    width: max-content;
     font-size: clamp(1rem, 4.2vw, 1.28rem) !important;
     letter-spacing: 0.02em;
-    line-height: 1.12;
+    line-height: 1.18;
     left: calc(100% + 0.35rem);
+    text-wrap: pretty;
   }
 
   .ai-sparkles {
@@ -2974,12 +2984,13 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .scroll-progress__keyword {
-    max-width: 3.75rem;
-    font-size: 0.58rem;
+    max-width: min(76vw, 15rem);
+    font-size: 0.6rem;
+    letter-spacing: 0.04em;
   }
 
   .scroll-progress__keyword--welcome {
-    max-width: 6.75rem;
+    max-width: min(82vw, 11.5rem);
     font-size: clamp(0.95rem, 4.5vw, 1.15rem) !important;
   }
 

@@ -100,6 +100,26 @@
     { start: 0.84, end: 1.001, eraIndex: 3 },
   ];
 
+  /** Handy: KI-Phase kürzer, danach schneller weiter scrollen */
+  const EVOLUTION_TEXT_BANDS_MOBILE = [
+    { start: 0, end: 0.3, eraIndex: 0 },
+    { start: 0.3, end: 0.44, eraIndex: 1 },
+    { start: 0.44, end: 0.84, eraIndex: 2 },
+    { start: 0.84, end: 0.91, eraIndex: 3 },
+  ];
+
+  function isEvolutionMobileLayout() {
+    return window.matchMedia("(max-width: 960px)").matches;
+  }
+
+  function getEvolutionTextBands() {
+    return isEvolutionMobileLayout() ? EVOLUTION_TEXT_BANDS_MOBILE : EVOLUTION_TEXT_BANDS;
+  }
+
+  function getEvolutionScrollEndHold() {
+    return isEvolutionMobileLayout() ? 0.02 : EVOLUTION_SCROLL_END_HOLD;
+  }
+
 
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
@@ -449,7 +469,8 @@
 
   function scrollProgressToVideoProgress(scrollProgress) {
     const p = Math.min(1, Math.max(0, scrollProgress));
-    const motionEnd = 1 - EVOLUTION_SCROLL_END_HOLD;
+    const hold = getEvolutionScrollEndHold();
+    const motionEnd = 1 - hold;
     if (p >= motionEnd) return 1;
     return p / motionEnd;
   }
