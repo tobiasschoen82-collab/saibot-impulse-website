@@ -2922,18 +2922,14 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .brand--center {
-    grid-column: 1;
-    justify-self: start;
-    align-self: center;
-    min-width: 0;
-    height: 100%;
-  }
-
-  .site-header.is-scrolled .brand--center {
     grid-column: 1 / -1;
+    grid-row: 1;
     justify-self: center;
+    align-self: center;
     width: 100%;
     max-width: 100%;
+    min-width: 0;
+    height: 100%;
     padding-inline: 2.85rem 2.65rem;
     box-sizing: border-box;
   }
@@ -2948,6 +2944,7 @@ html:has(.intro:not(.is-done)) body {
     max-width: min(168px, 38vw);
     max-height: calc(var(--header-h) - 1rem);
     height: auto;
+    margin-inline: auto;
   }
 
   .nav-toggle {
