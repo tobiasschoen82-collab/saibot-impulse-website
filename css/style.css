@@ -1651,7 +1651,74 @@ html:has(.intro:not(.is-done)) body {
 
 /* Philosophie */
 .section--philosophy {
+  padding: 0;
+  overflow: clip;
   border-block: 1px solid rgba(77, 201, 255, 0.1);
+}
+
+.philosophy-scroll {
+  height: 230vh;
+  position: relative;
+}
+
+.philosophy-sticky {
+  position: sticky;
+  top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+  display: flex;
+  align-items: center;
+  padding: 2.5rem 0 4rem;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 20%, rgba(77, 201, 255, 0.07), transparent 55%),
+    linear-gradient(180deg, #0c121c 0%, #111c2e 50%, #0a1018 100%);
+  overflow: hidden;
+}
+
+.philosophy-video-layer {
+  position: absolute;
+  inset: -8%;
+  z-index: var(--philosophy-video-z, 3);
+  transform: scale(var(--philosophy-video-scale, 1));
+  transform-origin: center center;
+  opacity: var(--philosophy-video-opacity, 1);
+  pointer-events: none;
+  transition:
+    transform 0.2s linear,
+    opacity 0.35s var(--ease);
+  will-change: transform, opacity;
+}
+
+.philosophy-video-layer__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.philosophy-video-layer__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, transparent 25%, rgba(6, 10, 16, 0.45) 100%),
+    linear-gradient(180deg, rgba(8, 12, 18, 0.25), rgba(6, 10, 16, 0.55));
+}
+
+.philosophy-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  opacity: var(--philosophy-content-opacity, 0);
+  transform: translateY(calc((1 - var(--philosophy-content-opacity, 0)) * 28px));
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.philosophy-stage.is-scroll-ready {
+  pointer-events: auto;
 }
 
 .philosophy-grid {
@@ -2870,6 +2937,19 @@ html:has(.intro:not(.is-done)) body {
     height: 320vh;
   }
 
+  .philosophy-scroll {
+    height: 300vh;
+  }
+
+  .philosophy-sticky {
+    align-items: flex-start;
+    padding: 1.75rem 0 7rem;
+  }
+
+  .philosophy-video-layer {
+    inset: -12%;
+  }
+
   .klarheit-earth {
     --earth-size-base: min(72vmin, 420px);
   }
@@ -3550,5 +3630,24 @@ html:has(.intro:not(.is-done)) body {
 
   .hero__parallax {
     inset: 0;
+  }
+
+  .philosophy-scroll {
+    height: auto;
+  }
+
+  .philosophy-sticky {
+    position: relative;
+    min-height: 0;
+  }
+
+  .philosophy-video-layer {
+    display: none;
+  }
+
+  .philosophy-stage {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
   }
 }

@@ -35,6 +35,10 @@
   const klarheitScroll = document.getElementById("klarheit-scroll");
   const klarheitEarth = document.getElementById("klarheit-earth");
   const klarheitEarthVideo = document.getElementById("klarheit-earth-video");
+  const philosophyScroll = document.getElementById("philosophy-scroll");
+  const philosophyVideoLayer = document.getElementById("philosophy-video-layer");
+  const philosophyScrollVideo = document.getElementById("philosophy-scroll-video");
+  const philosophyStage = document.getElementById("philosophy-stage");
   const contactForm = document.getElementById("contact-form");
   const contactModal = document.getElementById("contact-modal");
   let scrollRevealReady = false;
@@ -641,6 +645,7 @@
 
     updateHeroStoryScroll();
     updateKlarheitEarthScroll();
+    updatePhilosophyScroll();
     updateHeroStageVisibility();
     updateScrollKeywordLabel();
   }
@@ -744,6 +749,63 @@
 
     klarheitEarth.style.setProperty("--earth-scale", String(scale));
     klarheitEarth.style.setProperty("--earth-opacity", String(opacity));
+  }
+
+  function updatePhilosophyScroll() {
+    if (!philosophyScroll || !philosophyVideoLayer) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      philosophyVideoLayer.hidden = true;
+      if (philosophyStage) {
+        philosophyStage.style.setProperty("--philosophy-content-opacity", "1");
+        philosophyStage.classList.add("is-scroll-ready");
+      }
+      return;
+    }
+
+    philosophyVideoLayer.hidden = false;
+
+    const rect = philosophyScroll.getBoundingClientRect();
+    const inView = rect.bottom > 0 && rect.top < window.innerHeight;
+
+    if (philosophyScrollVideo && inView && philosophyScrollVideo.paused) {
+      philosophyScrollVideo.play().catch(() => {});
+    }
+
+    const scrollable = philosophyScroll.offsetHeight - window.innerHeight;
+    const isMobile = window.matchMedia("(max-width: 960px)").matches;
+    const scaleEnd = isMobile ? 0.38 : 0.24;
+    const videoOpacityEnd = isMobile ? 0.34 : 0.26;
+
+    if (scrollable <= 0) {
+      philosophyVideoLayer.style.setProperty("--philosophy-video-scale", String(scaleEnd));
+      philosophyVideoLayer.style.setProperty("--philosophy-video-opacity", String(videoOpacityEnd));
+      philosophyVideoLayer.style.setProperty("--philosophy-video-z", "0");
+      if (philosophyStage) {
+        philosophyStage.style.setProperty("--philosophy-content-opacity", "1");
+        philosophyStage.classList.add("is-scroll-ready");
+      }
+      return;
+    }
+
+    const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
+    const progress = traveled / scrollable;
+    const shrinkPhase = Math.min(1, progress / (isMobile ? 0.72 : 0.68));
+    const contentPhase = Math.min(1, Math.max(0, (progress - 0.08) / (isMobile ? 0.62 : 0.58)));
+
+    const scale = 1 + (scaleEnd - 1) * shrinkPhase;
+    const videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
+    const contentOpacity = contentPhase;
+
+    philosophyVideoLayer.style.setProperty("--philosophy-video-scale", scale.toFixed(3));
+    philosophyVideoLayer.style.setProperty("--philosophy-video-opacity", videoOpacity.toFixed(3));
+    philosophyVideoLayer.style.setProperty("--philosophy-video-z", shrinkPhase > 0.78 ? "0" : "3");
+
+    if (philosophyStage) {
+      philosophyStage.style.setProperty("--philosophy-content-opacity", contentOpacity.toFixed(3));
+      philosophyStage.classList.toggle("is-scroll-ready", contentOpacity > 0.55);
+    }
   }
 
   window.addEventListener("scroll", updateScrollUi, { passive: true });
