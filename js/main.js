@@ -791,15 +791,43 @@
 
     const traveled = Math.min(Math.max(-rect.top, 0), scrollable);
     const progress = traveled / scrollable;
-    const shrinkPhase = Math.min(1, progress / (isMobile ? 0.72 : 0.68));
-    const contentPhase = Math.min(1, Math.max(0, (progress - 0.08) / (isMobile ? 0.62 : 0.58)));
 
-    const scale = 1 + (scaleEnd - 1) * shrinkPhase;
-    const videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
-    const contentOpacity = contentPhase;
+    let scale;
+    let videoOpacity;
+    let contentOpacity;
+    let videoY = 0;
+    let shrinkPhase;
+
+    if (isMobile) {
+      const shrinkStart = 0.22;
+      const shrinkEnd = 0.78;
+      videoY = 0;
+
+      if (progress < shrinkStart) {
+        scale = 1;
+        shrinkPhase = 0;
+      } else if (progress < shrinkEnd) {
+        const shrinkT = (progress - shrinkStart) / (shrinkEnd - shrinkStart);
+        scale = 1 + (scaleEnd - 1) * shrinkT;
+        shrinkPhase = shrinkT;
+      } else {
+        scale = scaleEnd;
+        shrinkPhase = 1;
+      }
+
+      videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
+      contentOpacity = Math.min(1, Math.max(0, (progress - 0.5) / 0.38));
+    } else {
+      shrinkPhase = Math.min(1, progress / 0.68);
+      scale = 1 + (scaleEnd - 1) * shrinkPhase;
+      videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
+      contentOpacity = Math.min(1, Math.max(0, (progress - 0.08) / 0.58));
+      videoY = 0;
+    }
 
     philosophyVideoLayer.style.setProperty("--philosophy-video-scale", scale.toFixed(3));
     philosophyVideoLayer.style.setProperty("--philosophy-video-opacity", videoOpacity.toFixed(3));
+    philosophyVideoLayer.style.setProperty("--philosophy-video-y", `${videoY}px`);
     philosophyVideoLayer.style.setProperty("--philosophy-video-z", shrinkPhase > 0.78 ? "0" : "3");
 
     if (philosophyStage) {
@@ -901,12 +929,60 @@
     sections.forEach((section) => observer.observe(section));
   }
 
+  function initAiSparklesTouch() {
+    const container = document.getElementById("ai-sparkles");
+    if (!container) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion || !window.matchMedia("(max-width: 960px)").matches) return;
+
+    container.classList.add("ai-sparkles--touch");
+
+    const sparkleSvg =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#9ee8ff" d="M12 2.5l1.65 5.7L19 10l-5.35 1.8L12 17.5l-1.65-5.7L5 10l5.35-1.8L12 2.5z"/></svg>';
+
+    let lastBurstAt = 0;
+
+    function spawnBurst(clientX, clientY) {
+      const now = performance.now();
+      if (now - lastBurstAt < 48) return;
+      lastBurstAt = now;
+
+      const count = 3 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < count; i += 1) {
+        const el = document.createElement("span");
+        el.className =
+          i % 2 === 0 ? "ai-sparkle ai-sparkle--touch-burst" : "ai-sparkle ai-sparkle--dim ai-sparkle--touch-burst";
+        el.innerHTML = sparkleSvg;
+        const spread = 10 + i * 7;
+        el.style.left = `${clientX + (Math.random() - 0.5) * spread}px`;
+        el.style.top = `${clientY + (Math.random() - 0.5) * spread}px`;
+        container.appendChild(el);
+        window.setTimeout(() => el.remove(), 700);
+      }
+    }
+
+    function onTouch(event) {
+      Array.from(event.changedTouches).forEach((touch) => {
+        spawnBurst(touch.clientX, touch.clientY);
+      });
+    }
+
+    document.addEventListener("touchstart", onTouch, { passive: true });
+    document.addEventListener("touchmove", onTouch, { passive: true });
+  }
+
   function initAiSparkles() {
     const container = document.getElementById("ai-sparkles");
     if (!container) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion || window.matchMedia("(max-width: 960px)").matches) return;
+    if (reducedMotion) return;
+
+    if (window.matchMedia("(max-width: 960px)").matches) {
+      initAiSparklesTouch();
+      return;
+    }
 
     const sparkleSvg =
       '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#9ee8ff" d="M12 2.5l1.65 5.7L19 10l-5.35 1.8L12 17.5l-1.65-5.7L5 10l5.35-1.8L12 2.5z"/></svg>';

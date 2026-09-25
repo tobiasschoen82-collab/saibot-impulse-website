@@ -1120,6 +1120,23 @@ html:has(.intro:not(.is-done)) body {
   transform: scale(0.75);
 }
 
+@keyframes ai-sparkle-touch-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.55) translateY(-10px);
+  }
+}
+
 /* Evolution · Filmrolle */
 .section--evolution {
   padding: 0;
@@ -1678,7 +1695,7 @@ html:has(.intro:not(.is-done)) body {
   position: absolute;
   inset: -8%;
   z-index: var(--philosophy-video-z, 3);
-  transform: scale(var(--philosophy-video-scale, 1));
+  transform: translateY(var(--philosophy-video-y, 0px)) scale(var(--philosophy-video-scale, 1));
   transform-origin: center center;
   opacity: var(--philosophy-video-opacity, 1);
   pointer-events: none;
@@ -2937,16 +2954,36 @@ html:has(.intro:not(.is-done)) body {
   }
 
   .philosophy-scroll {
-    height: 300vh;
+    height: 360vh;
   }
 
   .philosophy-sticky {
     align-items: flex-start;
     padding: 1.75rem 0 7rem;
+    background: #06080c;
   }
 
   .philosophy-video-layer {
-    inset: -12%;
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: calc(100dvh - var(--header-h));
+    max-height: calc(100dvh - var(--header-h));
+    transform: translate(-50%, -50%) translateY(var(--philosophy-video-y, 0px))
+      scale(var(--philosophy-video-scale, 1));
+    transform-origin: center center;
+  }
+
+  .philosophy-video-layer__video {
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .philosophy-video-layer__veil {
+    background:
+      linear-gradient(180deg, rgba(6, 8, 12, 0.15) 0%, transparent 35%, transparent 65%, rgba(6, 8, 12, 0.35) 100%);
+    pointer-events: none;
   }
 
   .klarheit-earth {
@@ -3008,8 +3045,29 @@ html:has(.intro:not(.is-done)) body {
     text-wrap: pretty;
   }
 
-  .ai-sparkles {
+  .ai-sparkles:not(.ai-sparkles--touch) {
     display: none;
+  }
+
+  .ai-sparkles.ai-sparkles--touch {
+    display: block;
+  }
+
+  .ai-sparkle--touch-burst {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    pointer-events: none;
+    animation: ai-sparkle-touch-burst 0.62s var(--ease) forwards;
+  }
+
+  .ai-sparkle--touch-burst.ai-sparkle--dim {
+    width: 12px;
+    height: 12px;
+    animation-duration: 0.52s;
   }
 
   .site-header__bar {
