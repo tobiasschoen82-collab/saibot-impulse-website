@@ -1708,7 +1708,6 @@ html:has(.intro:not(.is-done)) body {
 .philosophy-stage {
   position: relative;
   z-index: 2;
-  width: 100%;
   opacity: var(--philosophy-content-opacity, 0);
   transform: translateY(calc((1 - var(--philosophy-content-opacity, 0)) * 28px));
   transition:
