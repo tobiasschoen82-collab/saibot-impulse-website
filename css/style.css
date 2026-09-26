@@ -2848,13 +2848,18 @@ html:has(.intro:not(.is-done)) body {
     grid-template-columns: 1fr;
   }
 
+  .hero__stage {
+    top: var(--header-h);
+    height: calc(100dvh - var(--header-h));
+  }
+
   .hero__parallax {
-    inset: -3%;
+    inset: 0;
   }
 
   .hero__parallax-img {
     object-fit: contain;
-    object-position: center top;
+    object-position: center 18%;
     transform: none;
   }
 

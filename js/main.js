@@ -904,48 +904,50 @@
     if (reducedMotion) return;
 
     const maxShift = 36;
-    const mobileParallaxLift = () =>
-      Math.round(Math.min(-56, -(window.innerHeight * 0.11 + 8)));
+    const maxShiftMobile = 14;
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
     let rafId = 0;
 
+    function applyParallaxFromPoint(clientX, clientY) {
+      const rect = hero.getBoundingClientRect();
+      const relX = (clientX - rect.left) / rect.width - 0.5;
+      const relY = (clientY - rect.top) / rect.height - 0.5;
+      const shift = window.matchMedia("(max-width: 960px)").matches ? maxShiftMobile : maxShift;
+      targetX = -relX * shift;
+      targetY = -relY * shift;
+    }
+
     function tick() {
       const isMobileParallax = window.matchMedia("(max-width: 960px)").matches;
-      if (isMobileParallax) {
-        heroParallax.style.transform = `translate3d(0, ${mobileParallaxLift()}px, 0)`;
-      } else {
-        currentX += (targetX - currentX) * 0.08;
-        currentY += (targetY - currentY) * 0.08;
-        heroParallax.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
+      const ease = isMobileParallax ? 0.1 : 0.08;
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+      heroParallax.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
       rafId = window.requestAnimationFrame(tick);
     }
 
     rafId = window.requestAnimationFrame(tick);
 
-    if (window.matchMedia("(max-width: 960px)").matches) {
-      window.addEventListener(
-        "resize",
-        () => {
-          heroParallax.style.transform = `translate3d(0, ${mobileParallaxLift()}px, 0)`;
-        },
-        { passive: true }
-      );
-      window.addEventListener("beforeunload", () => {
-        window.cancelAnimationFrame(rafId);
-      });
-      return;
-    }
-
     hero.addEventListener("mousemove", (event) => {
-      const rect = hero.getBoundingClientRect();
-      const relX = (event.clientX - rect.left) / rect.width - 0.5;
-      const relY = (event.clientY - rect.top) / rect.height - 0.5;
-      targetX = -relX * maxShift;
-      targetY = -relY * maxShift;
+      applyParallaxFromPoint(event.clientX, event.clientY);
+    });
+
+    hero.addEventListener(
+      "touchmove",
+      (event) => {
+        if (!window.matchMedia("(max-width: 960px)").matches) return;
+        const touch = event.touches[0];
+        if (touch) applyParallaxFromPoint(touch.clientX, touch.clientY);
+      },
+      { passive: true }
+    );
+
+    hero.addEventListener("touchend", () => {
+      targetX = 0;
+      targetY = 0;
     });
 
     hero.addEventListener("mouseleave", () => {
