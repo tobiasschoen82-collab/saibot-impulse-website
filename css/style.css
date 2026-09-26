@@ -2854,7 +2854,7 @@ html:has(.intro:not(.is-done)) body {
 
   .hero__parallax-img {
     object-fit: contain;
-    object-position: center center;
+    object-position: center top;
     transform: none;
   }
 
@@ -2959,18 +2959,50 @@ html:has(.intro:not(.is-done)) body {
 
   .philosophy-sticky {
     align-items: flex-start;
-    padding: 1.75rem 0 7rem;
+    padding: 1.25rem 0 7rem;
     background: #06080c;
+  }
+
+  .section--philosophy .philosophy-stage {
+    opacity: 1;
+    transform: none;
+  }
+
+  .section--philosophy .philosophy-stage .section__head {
+    position: relative;
+    z-index: 5;
+    margin-bottom: 1rem;
+    pointer-events: none;
+  }
+
+  .section--philosophy .philosophy-stage .section__head .eyebrow {
+    opacity: 1;
+  }
+
+  .section--philosophy .philosophy-stage .section__head h2,
+  .section--philosophy .philosophy-stage .section__head .section__sub {
+    opacity: var(--philosophy-content-opacity, 0);
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .section--philosophy .philosophy-stage .philosophy-grid,
+  .section--philosophy .philosophy-stage .philosophy-quote,
+  .section--philosophy .philosophy-stage .philosophy-hint {
+    opacity: var(--philosophy-content-opacity, 0);
+    transform: translateY(calc((1 - var(--philosophy-content-opacity, 0)) * 20px));
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.45s var(--ease);
   }
 
   .section--philosophy .philosophy-video-layer {
     inset: auto;
     left: 50%;
     top: var(--philosophy-video-top, 11.5rem);
-    width: min(78vw, 300px);
-    height: min(42dvh, 240px);
-    max-width: 300px;
-    max-height: min(42dvh, 240px);
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    height: min(52dvh, calc((100vw - 2rem) * 0.72));
+    max-height: min(52dvh, calc(100dvh - var(--header-h) - 10rem));
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow:

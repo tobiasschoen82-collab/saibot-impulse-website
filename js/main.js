@@ -669,9 +669,21 @@
     const progress = traveled / scrollable;
 
     if (hero) {
-      const darken = Math.min(1, Math.max(0, progress * 1.15));
+      const isMobileStory = window.matchMedia("(max-width: 960px)").matches;
+      let darken;
+      if (isMobileStory) {
+        const darkenStart = 0.16;
+        const darkenRamp = 0.34;
+        if (progress <= darkenStart) {
+          darken = 0;
+        } else {
+          darken = Math.min(1, ((progress - darkenStart) / darkenRamp) * 1.05);
+        }
+      } else {
+        darken = Math.min(1, Math.max(0, progress * 1.15));
+      }
       hero.style.setProperty("--hero-story-darken", darken.toFixed(3));
-      hero.classList.toggle("hero--story-dark", progress > 0.04);
+      hero.classList.toggle("hero--story-dark", isMobileStory ? progress > 0.18 : progress > 0.04);
     }
 
     const beat = resolveHeroStoryBeat(progress);
@@ -760,20 +772,22 @@
     }
 
     const sticky = philosophyVideoLayer.closest(".philosophy-sticky");
+    const eyebrow = philosophyStage.querySelector(".section__head .eyebrow");
     const h2 = philosophyStage.querySelector(".section__head h2");
-    const sub = philosophyStage.querySelector(".section__head .section__sub");
-    if (!sticky || !h2 || !sub) return;
+    if (!sticky || !eyebrow || !h2) return;
 
     const stickyRect = sticky.getBoundingClientRect();
+    const eyebrowRect = eyebrow.getBoundingClientRect();
     const h2Rect = h2.getBoundingClientRect();
-    const subRect = sub.getBoundingClientRect();
-    const bandTop = h2Rect.top;
-    const bandBottom = subRect.bottom;
-    const anchorCenter = bandTop + (bandBottom - bandTop) * 0.5 - stickyRect.top;
+    const gapBelowEyebrow = 12;
+    const layerHeight = philosophyVideoLayer.offsetHeight || 280;
+    const anchorCenter =
+      eyebrowRect.bottom - stickyRect.top + gapBelowEyebrow + layerHeight * 0.46;
+    const minCenter = h2Rect.top - stickyRect.top + layerHeight * 0.38;
 
     philosophyVideoLayer.style.setProperty(
       "--philosophy-video-top",
-      `${Math.round(Math.max(88, anchorCenter))}px`
+      `${Math.round(Math.max(minCenter, anchorCenter))}px`
     );
   }
 
@@ -825,8 +839,8 @@
     let shrinkPhase;
 
     if (isMobile) {
-      const shrinkStart = 0.18;
-      const shrinkEnd = 0.72;
+      const shrinkStart = 0.1;
+      const shrinkEnd = 0.65;
       videoY = 0;
 
       if (progress < shrinkStart) {
@@ -842,7 +856,7 @@
       }
 
       videoOpacity = 1 + (videoOpacityEnd - 1) * shrinkPhase;
-      contentOpacity = Math.min(1, Math.max(0, (progress - 0.48) / 0.4));
+      contentOpacity = Math.min(1, Math.max(0, (progress - 0.26) / 0.42));
     } else {
       shrinkPhase = Math.min(1, progress / 0.68);
       scale = 1 + (scaleEnd - 1) * shrinkPhase;
@@ -864,8 +878,12 @@
 
   window.addEventListener("scroll", updateScrollUi, { passive: true });
   window.addEventListener("resize", measurePhilosophyVideoAnchor, { passive: true });
-  window.addEventListener("load", measurePhilosophyVideoAnchor);
+  window.addEventListener("load", () => {
+    measurePhilosophyVideoAnchor();
+    window.requestAnimationFrame(measurePhilosophyVideoAnchor);
+  });
   measurePhilosophyVideoAnchor();
+  window.requestAnimationFrame(measurePhilosophyVideoAnchor);
   updateScrollUi();
 
   placeholderLinks.forEach((link) => {
@@ -886,6 +904,8 @@
     if (reducedMotion) return;
 
     const maxShift = 36;
+    const mobileParallaxLift = () =>
+      Math.round(Math.min(-56, -(window.innerHeight * 0.11 + 8)));
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
@@ -893,13 +913,32 @@
     let rafId = 0;
 
     function tick() {
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
-      heroParallax.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      const isMobileParallax = window.matchMedia("(max-width: 960px)").matches;
+      if (isMobileParallax) {
+        heroParallax.style.transform = `translate3d(0, ${mobileParallaxLift()}px, 0)`;
+      } else {
+        currentX += (targetX - currentX) * 0.08;
+        currentY += (targetY - currentY) * 0.08;
+        heroParallax.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
       rafId = window.requestAnimationFrame(tick);
     }
 
     rafId = window.requestAnimationFrame(tick);
+
+    if (window.matchMedia("(max-width: 960px)").matches) {
+      window.addEventListener(
+        "resize",
+        () => {
+          heroParallax.style.transform = `translate3d(0, ${mobileParallaxLift()}px, 0)`;
+        },
+        { passive: true }
+      );
+      window.addEventListener("beforeunload", () => {
+        window.cancelAnimationFrame(rafId);
+      });
+      return;
+    }
 
     hero.addEventListener("mousemove", (event) => {
       const rect = hero.getBoundingClientRect();
