@@ -908,18 +908,52 @@
   function initPhilosophyVideoEndHold() {
     if (!philosophyScrollVideo) return;
 
-    philosophyScrollVideo.loop = false;
+    const video = philosophyScrollVideo;
+    video.loop = false;
+    video.removeAttribute("loop");
 
-    philosophyScrollVideo.addEventListener("ended", () => {
+    function restartPhilosophyVideoLoop() {
+      philosophyVideoEndHoldActive = false;
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    }
+
+    function startPhilosophyEndHold() {
+      if (philosophyVideoEndHoldActive) return;
       philosophyVideoEndHoldActive = true;
-      philosophyScrollVideo.pause();
+
+      const duration = video.duration;
+      if (Number.isFinite(duration) && duration > 0) {
+        try {
+          video.currentTime = Math.max(0, duration - 0.042);
+        } catch (_) {
+          /* seek am Ende kann kurz fehlschlagen */
+        }
+      }
+
+      video.pause();
       window.clearTimeout(philosophyVideoEndHoldTimer);
-      philosophyVideoEndHoldTimer = window.setTimeout(() => {
-        philosophyVideoEndHoldActive = false;
-        philosophyScrollVideo.currentTime = 0;
-        philosophyScrollVideo.play().catch(() => {});
-      }, PHILOSOPHY_VIDEO_END_HOLD_MS);
+      philosophyVideoEndHoldTimer = window.setTimeout(restartPhilosophyVideoLoop, PHILOSOPHY_VIDEO_END_HOLD_MS);
+    }
+
+    video.addEventListener("loadedmetadata", () => {
+      video.loop = false;
     });
+
+    video.addEventListener("ended", startPhilosophyEndHold);
+
+    video.addEventListener(
+      "timeupdate",
+      () => {
+        if (philosophyVideoEndHoldActive || video.paused) return;
+        const duration = video.duration;
+        if (!Number.isFinite(duration) || duration <= 0.2) return;
+        if (video.currentTime >= duration - 0.1) {
+          startPhilosophyEndHold();
+        }
+      },
+      { passive: true }
+    );
   }
 
   function initHeroParallax() {
