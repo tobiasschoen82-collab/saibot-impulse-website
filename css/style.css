@@ -1613,16 +1613,74 @@ html:has(.intro:not(.is-done)) body {
     linear-gradient(180deg, rgba(17, 28, 46, 0.35), rgba(10, 16, 24, 0.65));
 }
 
-.klarheit-earth__credit {
+.klarheit-trust__scene {
   position: absolute;
-  right: 0.75rem;
-  bottom: 0.5rem;
-  margin: 0;
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(232, 238, 244, 0.45);
-  z-index: 2;
+  inset: 0;
+}
+
+.klarheit-trust__ring,
+.klarheit-trust__scales {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.klarheit-trust__ring--outer {
+  animation: klarheit-trust-spin 26s linear infinite;
+}
+
+.klarheit-trust__ring--inner {
+  animation: klarheit-trust-spin 18s linear infinite reverse;
+}
+
+.klarheit-trust__scales {
+  animation: klarheit-trust-sway 6.5s ease-in-out infinite;
+  transform-origin: 50% 42%;
+}
+
+.klarheit-trust__glow {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(77, 201, 255, 0.22), transparent 68%);
+  animation: klarheit-trust-pulse 4.5s ease-in-out infinite;
+}
+
+@keyframes klarheit-trust-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes klarheit-trust-sway {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes klarheit-trust-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+.klarheit-trust .klarheit-earth__veil {
+  background:
+    radial-gradient(circle at 50% 45%, transparent 30%, rgba(10, 16, 24, 0.5) 100%),
+    linear-gradient(180deg, rgba(17, 28, 46, 0.25), rgba(10, 16, 24, 0.62));
 }
 
 .klarheit-stage {
@@ -1769,6 +1827,26 @@ html:has(.intro:not(.is-done)) body {
   filter: grayscale(0.2);
 }
 
+.philosophy-card__icon--svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: rgba(77, 201, 255, 0.1);
+  border: 1px solid rgba(77, 201, 255, 0.22);
+  color: var(--accent);
+  filter: none;
+  margin-bottom: 0.75rem;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.philosophy-card__icon--svg svg {
+  width: 2.15rem;
+  height: 2.15rem;
+}
+
 .philosophy-card h3 {
   font-family: var(--font-display);
   font-size: 1.12rem;
@@ -1905,9 +1983,9 @@ html:has(.intro:not(.is-done)) body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  border-radius: 10px;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
   background: rgba(77, 201, 255, 0.1);
   border: 1px solid rgba(77, 201, 255, 0.22);
   margin-bottom: 0.85rem;
@@ -1915,8 +1993,8 @@ html:has(.intro:not(.is-done)) body {
 }
 
 .card__icon--svg svg {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 2.15rem;
+  height: 2.15rem;
 }
 
 .card {
@@ -3877,8 +3955,14 @@ body.is-module-showcase-open {
 
 .philosophy-card.surface-card.is-hovered .philosophy-card__icon,
 .philosophy-card.surface-card:focus-within .philosophy-card__icon {
-  transform: scale(1.12) rotate(-6deg);
+  transform: scale(1.08) rotate(-4deg);
   filter: drop-shadow(0 0 10px rgba(77, 201, 255, 0.35));
+}
+
+.philosophy-card.surface-card.is-hovered .philosophy-card__icon--svg,
+.philosophy-card.surface-card:focus-within .philosophy-card__icon--svg {
+  filter: none;
+  box-shadow: 0 0 18px rgba(77, 201, 255, 0.28);
 }
 
 .philosophy-card__icon {
@@ -4195,7 +4279,10 @@ body.is-module-showcase-open {
   .scroll-progress__fill::after,
   .evolution-beam,
   .evolution-beam--soft,
-  .evolution-projector {
+  .evolution-projector,
+  .klarheit-trust__ring,
+  .klarheit-trust__scales,
+  .klarheit-trust__glow {
     animation: none;
   }
 

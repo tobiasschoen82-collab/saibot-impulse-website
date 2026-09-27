@@ -140,21 +140,27 @@
         <div class="philosophy-grid philosophy-grid--steps" id="philosophy-steps">
           <article class="philosophy-card surface-card surface-card--step reveal reveal--from-left" data-expand data-step="1">
             <span class="surface-card__step" aria-hidden="true">1</span>
-            <span class="philosophy-card__icon" aria-hidden="true">☕</span>
+            <span class="philosophy-card__icon philosophy-card__icon--svg" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"><path d="M6 8h10a2 2 0 0 1 2 2v1a4 4 0 0 1-4 4H8a2 2 0 0 1-2-2V8z"/><path d="M6 8V6a2 2 0 0 1 2-2h1"/><path d="M16 11h1.5a2.5 2.5 0 0 0 0-5H16"/><path d="M8 18h6"/><path d="M9 3.5v1.5M11.5 3v2M14 3.5v1.5"/></svg>
+            </span>
             <h3 class="reveal-text">Gemeinsam statt solo</h3>
             <p>KI nutzen wir im Team — im Raum, nicht verstreut in Homeoffice-Schachteln. Ideen entstehen nebeneinander.</p>
             <p class="surface-card__example"><strong>Beispiel:</strong> Workshop am Bildschirm — danach Kaffee und klare nächste Schritte im Team.</p>
           </article>
           <article class="philosophy-card surface-card surface-card--step reveal reveal--from-below" data-expand data-step="2">
             <span class="surface-card__step" aria-hidden="true">2</span>
-            <span class="philosophy-card__icon" aria-hidden="true">◎</span>
+            <span class="philosophy-card__icon philosophy-card__icon--svg" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"><circle cx="12" cy="7" r="3"/><path d="M6 20v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1"/><path d="M16 11.5l1.5 1.5 3-3"/></svg>
+            </span>
             <h3 class="reveal-text">Der Mensch entscheidet</h3>
             <p>Automatisierung dort, wo sie entlastet — nicht dort, wo sie Nähe ersetzt. Was persönlich bleiben soll, bleibt bewusst persönlich.</p>
             <p class="surface-card__example"><strong>Beispiel:</strong> KI formuliert einen Entwurf — Sie geben frei, was an Kunden geht.</p>
           </article>
           <article class="philosophy-card surface-card surface-card--step reveal reveal--from-right" data-expand data-step="3">
             <span class="surface-card__step" aria-hidden="true">3</span>
-            <span class="philosophy-card__icon" aria-hidden="true">✦</span>
+            <span class="philosophy-card__icon philosophy-card__icon--svg" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/><path d="M16 5l1-1M19 8h1.5M5 8H3.5M8 5L7 4"/></svg>
+            </span>
             <h3 class="reveal-text">Zeit zurückgewinnen</h3>
             <p>Weniger Routine am Bildschirm heißt: öfter anklopfen, anrufen, vorbeigehen — bei Mitarbeitenden wie bei Kunden.</p>
             <p class="surface-card__example"><strong>Beispiel:</strong> Weniger Copy-Paste — mehr Zeit für den Anruf, der Vertrauen schafft.</p>
@@ -508,12 +514,27 @@
     <section id="klarheit" class="section section--klarheit section--focusable" data-scroll-keyword="Vertrauen">
       <div class="klarheit-scroll" id="klarheit-scroll">
         <div class="klarheit-sticky">
-          <div class="klarheit-earth" id="klarheit-earth" aria-hidden="true">
-            <video id="klarheit-earth-video" class="klarheit-earth__video" playsinline webkit-playsinline muted loop autoplay preload="auto" poster="assets/ki-trust.jpg">
-              <source src="assets/earth-nasa.mp4" type="video/mp4">
-            </video>
+          <div class="klarheit-earth klarheit-trust" id="klarheit-earth" aria-hidden="true">
+            <div class="klarheit-trust__scene">
+              <svg class="klarheit-trust__ring klarheit-trust__ring--outer" viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                <circle cx="120" cy="120" r="108" stroke="rgba(126,227,255,0.35)" stroke-width="1.5" stroke-dasharray="10 14"/>
+                <circle cx="120" cy="120" r="92" stroke="rgba(77,201,255,0.22)" stroke-width="1"/>
+              </svg>
+              <svg class="klarheit-trust__ring klarheit-trust__ring--inner" viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                <circle cx="120" cy="120" r="72" stroke="rgba(126,227,255,0.28)" stroke-width="2" stroke-dasharray="4 10"/>
+              </svg>
+              <svg class="klarheit-trust__scales" viewBox="0 0 240 240" fill="none" aria-hidden="true">
+                <path d="M120 52v116" stroke="rgba(158,232,255,0.75)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M72 68h96" stroke="rgba(158,232,255,0.75)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M72 68L52 118h40L72 68z" stroke="rgba(126,227,255,0.55)" stroke-width="2" fill="rgba(77,201,255,0.08)"/>
+                <path d="M168 68l20 50h-40L168 68z" stroke="rgba(126,227,255,0.55)" stroke-width="2" fill="rgba(77,201,255,0.08)"/>
+                <path d="M98 168h44" stroke="rgba(158,232,255,0.65)" stroke-width="3" stroke-linecap="round"/>
+                <path d="M108 168v8h24v-8" stroke="rgba(126,227,255,0.45)" stroke-width="2"/>
+                <circle cx="120" cy="120" r="34" stroke="rgba(126,227,255,0.18)" stroke-width="1.5"/>
+              </svg>
+              <div class="klarheit-trust__glow"></div>
+            </div>
             <div class="klarheit-earth__veil"></div>
-            <p class="klarheit-earth__credit">Erde: NASA SVS (Public Domain)</p>
           </div>
           <div class="wrap klarheit-stage">
         <header class="section__head section__head--center reveal reveal--from-below">
