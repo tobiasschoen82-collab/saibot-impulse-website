@@ -1556,7 +1556,7 @@ html:has(.intro:not(.is-done)) body {
 }
 
 .klarheit-scroll {
-  height: 380vh;
+  height: 280vh;
   position: relative;
 }
 
@@ -1586,10 +1586,15 @@ html:has(.intro:not(.is-done)) body {
   overflow: hidden;
   pointer-events: none;
   opacity: var(--earth-opacity, 0.38);
-  z-index: var(--klarheit-trust-z, 0);
+  z-index: 0;
   box-shadow:
     0 0 80px rgba(77, 201, 255, 0.15),
     inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.klarheit-bg.klarheit-earth {
+  --earth-size-base: min(96vmin, 980px);
+  border-radius: 50%;
 }
 
 .klarheit-earth__video {
@@ -1601,6 +1606,15 @@ html:has(.intro:not(.is-done)) body {
   backface-visibility: hidden;
 }
 
+.klarheit-earth__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  transform: scale(var(--earth-photo-zoom, 1.08));
+  transform-origin: center center;
+}
+
 .klarheit-earth__veil {
   position: absolute;
   inset: 0;
@@ -1609,168 +1623,33 @@ html:has(.intro:not(.is-done)) body {
     linear-gradient(180deg, rgba(17, 28, 46, 0.35), rgba(10, 16, 24, 0.65));
 }
 
-.klarheit-trust.klarheit-earth {
-  border-radius: 0;
-  overflow: visible;
-  box-shadow: none;
-  background: transparent;
-  z-index: 3;
-}
-
-.klarheit-trust {
-  --earth-size-base: min(112vmin, 1120px);
-}
-
-.klarheit-trust__scene {
-  position: absolute;
-  inset: 0;
-  font-size: calc(var(--earth-size-base) * var(--earth-scale, 0.32) * 0.026);
-}
-
-.klarheit-trust__ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.klarheit-trust__beam {
-  position: absolute;
-  inset: 0;
-  animation: klarheit-trust-sway 7s ease-in-out infinite;
-  transform-origin: 50% 39.5%;
-}
-
-.klarheit-trust__scales {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.klarheit-trust__ring--outer {
-  animation: klarheit-trust-spin 26s linear infinite;
-}
-
-.klarheit-trust__ring--inner {
-  animation: klarheit-trust-spin 18s linear infinite reverse;
-}
-
-.klarheit-trust__pan-card {
-  position: absolute;
-  width: 27%;
-  padding: 0.45em 0.5em 0.55em;
-  border-radius: 0.5em;
-  border: 1px solid rgba(126, 227, 255, 0.4);
-  background: rgba(10, 15, 22, 0.92);
-  box-shadow: 0 0.5em 1.2em rgba(0, 0, 0, 0.4);
-  pointer-events: none;
-  z-index: 3;
-  box-sizing: border-box;
-  transform-origin: 50% 100%;
-}
-
-.klarheit-trust__pan-title {
-  margin: 0 0 0.35em;
-  font-family: var(--font-display);
-  font-size: 1.08em;
-  line-height: 1.2;
-  color: var(--text);
-  opacity: var(--klarheit-pan-title-opacity, 0.35);
-}
-
-.klarheit-trust__pan-list {
-  margin: 0;
-  padding-left: 1.05em;
-  list-style: disc;
-  opacity: var(--klarheit-pan-detail-opacity, 0);
-}
-
-.klarheit-trust__pan-list li {
-  font-size: 0.82em;
-  line-height: 1.25;
-  color: var(--text-muted);
-  margin-bottom: 0.35em;
-}
-
-.klarheit-trust__pan-list li:last-child {
-  margin-bottom: 0;
-}
-
-.klarheit-trust__pan-note {
-  margin: 0.45em 0 0;
-  font-size: 0.78em;
-  line-height: 1.25;
-  color: var(--text-muted);
-  opacity: var(--klarheit-pan-detail-opacity, 0);
-}
-
-.klarheit-trust__pan-card--yes {
-  left: 1.5%;
-  top: 47.5%;
-  transform: rotate(-5deg);
-}
-
-.klarheit-trust__pan-card--no {
-  left: 71.5%;
-  top: 47.5%;
-  transform: rotate(5deg);
-}
-
-.klarheit-trust__glow {
-  position: absolute;
-  inset: 22%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(77, 201, 255, 0.22), transparent 68%);
-  animation: klarheit-trust-pulse 4.5s ease-in-out infinite;
-}
-
-@keyframes klarheit-trust-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes klarheit-trust-sway {
-  0%,
-  100% {
-    transform: rotate(-3deg);
-  }
-
-  50% {
-    transform: rotate(3deg);
-  }
-}
-
-@keyframes klarheit-trust-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.96);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.04);
-  }
-}
-
-.klarheit-trust .klarheit-earth__veil {
+.klarheit-bg .klarheit-earth__veil {
   background:
-    radial-gradient(circle at 50% 45%, transparent 30%, rgba(10, 16, 24, 0.5) 100%),
-    linear-gradient(180deg, rgba(17, 28, 46, 0.25), rgba(10, 16, 24, 0.62));
+    radial-gradient(circle at 50% 42%, transparent 22%, rgba(10, 16, 24, 0.62) 100%),
+    linear-gradient(180deg, rgba(17, 28, 46, 0.42), rgba(10, 16, 24, 0.72));
+}
+
+.klarheit-earth__credit {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.5rem;
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  color: rgba(158, 232, 255, 0.45);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+
+.klarheit-earth:hover .klarheit-earth__credit,
+.klarheit-earth:focus-within .klarheit-earth__credit {
+  opacity: 1;
 }
 
 .klarheit-stage {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
-}
-
-.klarheit-stage__head {
-  opacity: var(--klarheit-head-opacity, 1);
-  transition: opacity 0.35s linear;
-  pointer-events: none;
 }
 
 .klarheit-stage .section__head {
@@ -1781,6 +1660,31 @@ html:has(.intro:not(.is-done)) body {
 
 .klarheit-stage .section__sub {
   margin-inline: auto;
+}
+
+.klarheit-stage .clarity--wide {
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+.klarheit-stage .clarity--wide .clarity__col {
+  padding: 1.45rem 1.65rem;
+  background: rgba(10, 15, 22, 0.78);
+  backdrop-filter: blur(14px);
+}
+
+.klarheit-stage .clarity--wide .clarity__col h3 {
+  font-size: 1.05rem;
+}
+
+.klarheit-stage .clarity--wide .clarity__col li {
+  font-size: 0.94rem;
+  margin-bottom: 0.5rem;
+}
+
+.klarheit-stage .clarity__col {
+  background: rgba(10, 15, 22, 0.78);
+  backdrop-filter: blur(14px);
 }
 
 /* Philosophie */
@@ -3565,7 +3469,7 @@ body.is-module-showcase-open {
   }
 
   .klarheit-scroll {
-    height: 420vh;
+    height: 320vh;
   }
 
   .philosophy-scroll {
@@ -4339,11 +4243,6 @@ body.is-module-showcase-open {
   .evolution-beam,
   .evolution-beam--soft,
   .evolution-projector,
-  .klarheit-trust__ring,
-  .klarheit-trust__beam,
-  .klarheit-trust__glow {
-    animation: none;
-  }
 
   .scroll-progress.is-active {
     transform: none;
@@ -4376,14 +4275,8 @@ body.is-module-showcase-open {
     height: auto;
   }
 
-  .klarheit-trust.klarheit-earth {
-    --earth-scale: 0.95;
-    --earth-opacity: 0.85;
-    --klarheit-pan-title-opacity: 1;
-    --klarheit-pan-detail-opacity: 1;
-  }
-
-  .klarheit-stage__head {
-    --klarheit-head-opacity: 0.2;
+  .klarheit-bg.klarheit-earth {
+    --earth-scale: 0.85;
+    --earth-opacity: 0.5;
   }
 }

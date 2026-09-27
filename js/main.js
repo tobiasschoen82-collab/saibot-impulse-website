@@ -724,20 +724,15 @@
   function updateKlarheitEarthScroll() {
     if (!klarheitScroll || !klarheitEarth) return;
 
-    const stageHead = document.getElementById("klarheit-stage-head");
     const scrollable = klarheitScroll.offsetHeight - window.innerHeight;
     const isMobile = window.matchMedia("(max-width: 960px)").matches;
-    const scaleStart = isMobile ? 0.08 : 0.05;
-    const scalePeak = isMobile ? 0.88 : 1.06;
-    const growEnd = isMobile ? 0.52 : 0.56;
+    const scaleStart = isMobile ? 0.07 : 0.05;
+    const scalePeak = isMobile ? 1.05 : 1.18;
+    const growEnd = isMobile ? 0.62 : 0.58;
 
     if (scrollable <= 0) {
       klarheitEarth.style.setProperty("--earth-scale", String(scalePeak));
-      klarheitEarth.style.setProperty("--earth-opacity", "0.72");
-      klarheitEarth.style.setProperty("--klarheit-pan-title-opacity", "1");
-      klarheitEarth.style.setProperty("--klarheit-pan-detail-opacity", "1");
-      klarheitEarth.style.setProperty("--klarheit-trust-z", "1");
-      if (stageHead) stageHead.style.setProperty("--klarheit-head-opacity", "0.12");
+      klarheitEarth.style.setProperty("--earth-opacity", "0.55");
       return;
     }
 
@@ -747,32 +742,18 @@
 
     let scale;
     let opacity;
-    let readT;
 
     if (progress <= growEnd) {
       const t = klarheitEase(progress / growEnd);
       scale = scaleStart + (scalePeak - scaleStart) * t;
-      opacity = 0.14 + t * 0.52;
-      readT = t;
+      opacity = 0.12 + t * 0.48;
     } else {
       scale = scalePeak;
-      opacity = 0.66 + Math.min(0.12, (progress - growEnd) * 0.25);
-      readT = 1;
+      opacity = 0.6 + Math.min(0.08, (progress - growEnd) * 0.15);
     }
-
-    const headOpacity = Math.max(0.08, 1 - readT * 0.92);
-    const titleOpacity = 0.25 + readT * 0.75;
-    const detailOpacity = Math.min(1, Math.max(0, (readT - 0.35) / 0.65));
 
     klarheitEarth.style.setProperty("--earth-scale", scale.toFixed(3));
     klarheitEarth.style.setProperty("--earth-opacity", opacity.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-pan-title-opacity", titleOpacity.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-pan-detail-opacity", detailOpacity.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-trust-z", "1");
-
-    if (stageHead) {
-      stageHead.style.setProperty("--klarheit-head-opacity", headOpacity.toFixed(3));
-    }
   }
 
   function measurePhilosophyVideoAnchor() {
