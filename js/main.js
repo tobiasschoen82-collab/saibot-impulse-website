@@ -39,6 +39,9 @@
   const philosophyVideoLayer = document.getElementById("philosophy-video-layer");
   const philosophyScrollVideo = document.getElementById("philosophy-scroll-video");
   const philosophyStage = document.getElementById("philosophy-stage");
+  let philosophyVideoEndHoldActive = false;
+  let philosophyVideoEndHoldTimer = 0;
+  const PHILOSOPHY_VIDEO_END_HOLD_MS = 4500;
   const contactForm = document.getElementById("contact-form");
   const contactModal = document.getElementById("contact-modal");
   let scrollRevealReady = false;
@@ -809,7 +812,12 @@
     const rect = philosophyScroll.getBoundingClientRect();
     const inView = rect.bottom > 0 && rect.top < window.innerHeight;
 
-    if (philosophyScrollVideo && inView && philosophyScrollVideo.paused) {
+    if (
+      philosophyScrollVideo &&
+      inView &&
+      philosophyScrollVideo.paused &&
+      !philosophyVideoEndHoldActive
+    ) {
       philosophyScrollVideo.play().catch(() => {});
     }
 
@@ -896,6 +904,23 @@
       }
     });
   });
+
+  function initPhilosophyVideoEndHold() {
+    if (!philosophyScrollVideo) return;
+
+    philosophyScrollVideo.loop = false;
+
+    philosophyScrollVideo.addEventListener("ended", () => {
+      philosophyVideoEndHoldActive = true;
+      philosophyScrollVideo.pause();
+      window.clearTimeout(philosophyVideoEndHoldTimer);
+      philosophyVideoEndHoldTimer = window.setTimeout(() => {
+        philosophyVideoEndHoldActive = false;
+        philosophyScrollVideo.currentTime = 0;
+        philosophyScrollVideo.play().catch(() => {});
+      }, PHILOSOPHY_VIDEO_END_HOLD_MS);
+    });
+  }
 
   function initHeroParallax() {
     if (!hero || !heroParallax) return;
@@ -1404,6 +1429,7 @@
   }
 
   initEvolutionVideo();
+  initPhilosophyVideoEndHold();
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();
