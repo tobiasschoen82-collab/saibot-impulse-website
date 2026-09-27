@@ -1391,6 +1391,140 @@
     }
   }
 
+  function initModuleShowcase() {
+    const root = document.getElementById("module-showcase");
+    const source = document.getElementById("module-showcase-source");
+    const track = document.getElementById("module-showcase-track");
+    const viewport = document.getElementById("module-showcase-viewport");
+    const dotsRoot = document.getElementById("module-showcase-dots");
+    const titleEl = document.getElementById("module-showcase-title");
+    const closeBtn = document.getElementById("module-showcase-close");
+    const backdrop = document.getElementById("module-showcase-backdrop");
+    if (!root || !source || !track || !viewport) return;
+
+    const MODULE_TITLES = {
+      notes: "sAIbot Notes · Impuls-App",
+      web: "Webauftritt · edler Look",
+      workshop: "KI-Workshop · Material",
+      tool: "Kleines Tool · Prozess",
+    };
+
+    let slideIndex = 0;
+    let slideCount = 0;
+    let dragStartX = 0;
+    let dragDeltaX = 0;
+    let dragging = false;
+
+    function setSlide(index) {
+      if (!slideCount) return;
+      slideIndex = Math.min(Math.max(index, 0), slideCount - 1);
+      track.style.transform = `translate3d(${-slideIndex * 100}%, 0, 0)`;
+      dotsRoot.querySelectorAll(".module-showcase__dot").forEach((dot, i) => {
+        dot.classList.toggle("is-active", i === slideIndex);
+      });
+    }
+
+    function buildDots() {
+      dotsRoot.innerHTML = "";
+      for (let i = 0; i < slideCount; i += 1) {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = `module-showcase__dot${i === 0 ? " is-active" : ""}`;
+        dot.addEventListener("click", () => setSlide(i));
+        dotsRoot.appendChild(dot);
+      }
+    }
+
+    function openModule(moduleId) {
+      const bundle = source.querySelector(`[data-module="${moduleId}"]`);
+      if (!bundle) return;
+
+      track.innerHTML = "";
+      const slides = Array.from(bundle.querySelectorAll(".module-showcase__slide"));
+      slides.forEach((slide) => {
+        track.appendChild(slide.cloneNode(true));
+      });
+      slideCount = slides.length;
+      slideIndex = 0;
+      track.style.transform = "translate3d(0, 0, 0)";
+      buildDots();
+
+      if (titleEl) {
+        titleEl.textContent = MODULE_TITLES[moduleId] || "Modul-Vorschau";
+      }
+
+      root.hidden = false;
+      root.setAttribute("aria-hidden", "false");
+      document.body.classList.add("is-module-showcase-open");
+      closeBtn?.focus();
+    }
+
+    function closeModule() {
+      root.hidden = true;
+      root.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("is-module-showcase-open");
+      track.innerHTML = "";
+      slideCount = 0;
+    }
+
+    document.querySelectorAll("[data-module-showcase]").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        openModule(trigger.getAttribute("data-module-showcase"));
+      });
+    });
+
+    closeBtn?.addEventListener("click", closeModule);
+    backdrop?.addEventListener("click", closeModule);
+
+    window.addEventListener("keydown", (event) => {
+      if (root.hidden) return;
+      if (event.key === "Escape") closeModule();
+      if (event.key === "ArrowRight") setSlide(slideIndex + 1);
+      if (event.key === "ArrowLeft") setSlide(slideIndex - 1);
+    });
+
+    viewport.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      dragging = true;
+      dragStartX = event.clientX;
+      dragDeltaX = 0;
+      viewport.classList.add("is-dragging");
+      viewport.setPointerCapture(event.pointerId);
+    });
+
+    viewport.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      dragDeltaX = event.clientX - dragStartX;
+      const offsetPct = (dragDeltaX / viewport.offsetWidth) * 100;
+      track.style.transition = "none";
+      track.style.transform = `translate3d(${-slideIndex * 100 + offsetPct}%, 0, 0)`;
+    });
+
+    viewport.addEventListener("pointerup", (event) => {
+      if (!dragging) return;
+      dragging = false;
+      viewport.classList.remove("is-dragging");
+      track.style.transition = "";
+      try {
+        viewport.releasePointerCapture(event.pointerId);
+      } catch (_) {
+        /* ignore */
+      }
+      const threshold = viewport.offsetWidth * 0.16;
+      if (dragDeltaX < -threshold) setSlide(slideIndex + 1);
+      else if (dragDeltaX > threshold) setSlide(slideIndex - 1);
+      else setSlide(slideIndex);
+      dragDeltaX = 0;
+    });
+
+    viewport.addEventListener("pointercancel", () => {
+      dragging = false;
+      viewport.classList.remove("is-dragging");
+      track.style.transition = "";
+      setSlide(slideIndex);
+    });
+  }
+
   function initSurfaceCards() {
     const cards = document.querySelectorAll(".surface-card");
     if (!cards.length) return;
@@ -1467,6 +1601,7 @@
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();
+  initModuleShowcase();
   initSurfaceCards();
   initPhilosophySteps();
   initKlarheitEarthVideo();
