@@ -724,20 +724,20 @@
   function updateKlarheitEarthScroll() {
     if (!klarheitScroll || !klarheitEarth) return;
 
-    const clarity = document.getElementById("klarheit-clarity");
+    const stageHead = document.getElementById("klarheit-stage-head");
     const scrollable = klarheitScroll.offsetHeight - window.innerHeight;
     const isMobile = window.matchMedia("(max-width: 960px)").matches;
-    const scaleStart = isMobile ? 0.1 : 0.06;
-    const scalePeak = isMobile ? 0.78 : 1.02;
-    const scaleEnd = isMobile ? 0.3 : 0.24;
-    const peakAt = isMobile ? 0.48 : 0.52;
+    const scaleStart = isMobile ? 0.08 : 0.05;
+    const scalePeak = isMobile ? 0.88 : 1.06;
+    const growEnd = isMobile ? 0.52 : 0.56;
 
     if (scrollable <= 0) {
-      klarheitEarth.style.setProperty("--earth-scale", String(scaleEnd));
-      klarheitEarth.style.setProperty("--earth-opacity", "0.28");
-      klarheitEarth.style.setProperty("--klarheit-pan-opacity", "0");
-      klarheitEarth.style.setProperty("--klarheit-trust-z", "0");
-      if (clarity) clarity.style.setProperty("--klarheit-card-opacity", "1");
+      klarheitEarth.style.setProperty("--earth-scale", String(scalePeak));
+      klarheitEarth.style.setProperty("--earth-opacity", "0.72");
+      klarheitEarth.style.setProperty("--klarheit-pan-title-opacity", "1");
+      klarheitEarth.style.setProperty("--klarheit-pan-detail-opacity", "1");
+      klarheitEarth.style.setProperty("--klarheit-trust-z", "1");
+      if (stageHead) stageHead.style.setProperty("--klarheit-head-opacity", "0.12");
       return;
     }
 
@@ -747,31 +747,31 @@
 
     let scale;
     let opacity;
-    if (progress <= peakAt) {
-      const t = klarheitEase(progress / peakAt);
+    let readT;
+
+    if (progress <= growEnd) {
+      const t = klarheitEase(progress / growEnd);
       scale = scaleStart + (scalePeak - scaleStart) * t;
-      opacity = 0.16 + t * 0.44;
+      opacity = 0.14 + t * 0.52;
+      readT = t;
     } else {
-      const t = klarheitEase((progress - peakAt) / (1 - peakAt));
-      scale = scalePeak + (scaleEnd - scalePeak) * t;
-      opacity = 0.6 - t * 0.34;
+      scale = scalePeak;
+      opacity = 0.66 + Math.min(0.12, (progress - growEnd) * 0.25);
+      readT = 1;
     }
 
-    const contentReveal = Math.min(1, Math.max(0, (progress - 0.4) / 0.42));
-    const panOpacity = Math.min(1, Math.max(0, 1 - contentReveal * 1.15));
-    const panDetail = Math.min(1, Math.max(0, (scale - scaleStart) / (scalePeak - scaleStart)));
+    const headOpacity = Math.max(0.08, 1 - readT * 0.92);
+    const titleOpacity = 0.25 + readT * 0.75;
+    const detailOpacity = Math.min(1, Math.max(0, (readT - 0.35) / 0.65));
 
     klarheitEarth.style.setProperty("--earth-scale", scale.toFixed(3));
     klarheitEarth.style.setProperty("--earth-opacity", opacity.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-pan-opacity", panOpacity.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-pan-detail-opacity", panDetail.toFixed(3));
-    klarheitEarth.style.setProperty("--klarheit-trust-z", progress > 0.68 ? "0" : "1");
+    klarheitEarth.style.setProperty("--klarheit-pan-title-opacity", titleOpacity.toFixed(3));
+    klarheitEarth.style.setProperty("--klarheit-pan-detail-opacity", detailOpacity.toFixed(3));
+    klarheitEarth.style.setProperty("--klarheit-trust-z", "1");
 
-    if (clarity) {
-      clarity.style.setProperty("--klarheit-card-opacity", contentReveal.toFixed(3));
-      clarity.querySelectorAll(".clarity__col").forEach((col) => {
-        col.classList.toggle("is-scroll-ready", contentReveal > 0.55);
-      });
+    if (stageHead) {
+      stageHead.style.setProperty("--klarheit-head-opacity", headOpacity.toFixed(3));
     }
   }
 
