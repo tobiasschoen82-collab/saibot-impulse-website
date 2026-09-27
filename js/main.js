@@ -41,7 +41,7 @@
   const philosophyStage = document.getElementById("philosophy-stage");
   let philosophyVideoEndHoldActive = false;
   let philosophyVideoEndHoldTimer = 0;
-  const PHILOSOPHY_VIDEO_END_HOLD_MS = 4500;
+  const PHILOSOPHY_VIDEO_END_HOLD_MS = 2000;
   const contactForm = document.getElementById("contact-form");
   const contactModal = document.getElementById("contact-modal");
   let scrollRevealReady = false;
