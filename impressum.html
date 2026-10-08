@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Impressum · sAIbot Impulse</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
@@ -106,10 +103,39 @@
       <nav class="site-footer__legal" aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
+        <button type="button" class="site-footer__cookie-link" data-cookie-settings>Cookie-Einstellungen</button>
       </nav>
       <p class="site-footer__copy">© sAIbot Impulse</p>
     </div>
   </footer>
+  <div
+    class="cookie-banner"
+    id="cookie-banner"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-banner-title"
+    aria-describedby="cookie-banner-desc"
+    hidden
+  >
+    <div class="cookie-banner__panel">
+      <p class="cookie-banner__eyebrow">Einwilligung</p>
+      <h2 class="cookie-banner__title" id="cookie-banner-title">Cookies &amp; externe Dienste</h2>
+      <p class="cookie-banner__text" id="cookie-banner-desc">
+        Wir setzen nur Dienste ein, wenn Sie zustimmen — oder ausschließlich technisch Notwendiges, wenn Sie ablehnen.
+      </p>
+      <ul class="cookie-banner__list">
+        <li><strong>Notwendig:</strong> Speicherung Ihrer Auswahl (localStorage).</li>
+        <li><strong>Statistik (optional):</strong> aggregierter Seitenaufruf-Zähler (CountAPI).</li>
+        <li><strong>Externe Medien (optional):</strong> Google Fonts.</li>
+      </ul>
+      <div class="cookie-banner__actions">
+        <button type="button" class="btn btn--ghost" data-cookie-reject>Nur notwendige</button>
+        <button type="button" class="btn btn--primary" data-cookie-accept-all>Alle akzeptieren</button>
+      </div>
+      <p class="cookie-banner__legal"><a href="datenschutz.html">Datenschutzerklärung</a></p>
+    </div>
+  </div>
+  <script src="js/cookie-consent.js"></script>
   <script src="js/legal-nav.js"></script>
 </body>
 </html>

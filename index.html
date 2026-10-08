@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="sAIbot Impulse — KI-Beratung und Umsetzung für KMU: Use Cases, eigene Programme, Datenschutz im Blick. Edle Webauftritte, wenn Sie sie brauchen.">
   <title>sAIbot Impulse · Artificial Intelligence Solutions</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
@@ -122,6 +119,7 @@
               playsinline
               webkit-playsinline
               muted
+              loop
               preload="auto"
               src="assets/philosophy-scroll.mp4"
             ></video>
@@ -752,6 +750,7 @@
       <nav class="site-footer__legal" aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
+        <button type="button" class="site-footer__cookie-link" data-cookie-settings>Cookie-Einstellungen</button>
       </nav>
       <p class="site-footer__stat">
         <span class="site-footer__stat-label">Seitenaufrufe (geschätzt)</span>
@@ -761,7 +760,39 @@
     </div>
   </footer>
 
+  <div
+    class="cookie-banner"
+    id="cookie-banner"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-banner-title"
+    aria-describedby="cookie-banner-desc"
+    hidden
+  >
+    <div class="cookie-banner__panel">
+      <p class="cookie-banner__eyebrow">Einwilligung</p>
+      <h2 class="cookie-banner__title" id="cookie-banner-title">Cookies &amp; externe Dienste</h2>
+      <p class="cookie-banner__text" id="cookie-banner-desc">
+        Wir setzen nur Dienste ein, wenn Sie zustimmen — oder ausschließlich technisch Notwendiges, wenn Sie ablehnen.
+        Details finden Sie in der Datenschutzerklärung.
+      </p>
+      <ul class="cookie-banner__list">
+        <li><strong>Notwendig:</strong> Speicherung Ihrer Auswahl (localStorage), Betrieb der Seite.</li>
+        <li><strong>Statistik (optional):</strong> aggregierter Seitenaufruf-Zähler über CountAPI (Drittanbieter).</li>
+        <li><strong>Externe Medien (optional):</strong> Google Fonts (Schriftarten von Google-Servern).</li>
+      </ul>
+      <div class="cookie-banner__actions">
+        <button type="button" class="btn btn--ghost" data-cookie-reject>Nur notwendige</button>
+        <button type="button" class="btn btn--primary" data-cookie-accept-all>Alle akzeptieren</button>
+      </div>
+      <p class="cookie-banner__legal">
+        <a href="datenschutz.html">Datenschutzerklärung</a>
+      </p>
+    </div>
+  </div>
+
   <script src="js/site-config.js"></script>
+  <script src="js/cookie-consent.js"></script>
   <script src="js/booking.js"></script>
   <script src="js/visitors.js"></script>
   <script src="js/main.js"></script>

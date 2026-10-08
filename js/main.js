@@ -39,9 +39,6 @@
   const philosophyVideoLayer = document.getElementById("philosophy-video-layer");
   const philosophyScrollVideo = document.getElementById("philosophy-scroll-video");
   const philosophyStage = document.getElementById("philosophy-stage");
-  let philosophyVideoEndHoldActive = false;
-  let philosophyVideoEndHoldTimer = 0;
-  const PHILOSOPHY_VIDEO_END_HOLD_MS = 2000;
   const contactForm = document.getElementById("contact-form");
   const contactModal = document.getElementById("contact-modal");
   let scrollRevealReady = false;
@@ -805,8 +802,7 @@
     if (
       philosophyScrollVideo &&
       inView &&
-      philosophyScrollVideo.paused &&
-      !philosophyVideoEndHoldActive
+      philosophyScrollVideo.paused
     ) {
       philosophyScrollVideo.play().catch(() => {});
     }
@@ -894,57 +890,6 @@
       }
     });
   });
-
-  function initPhilosophyVideoEndHold() {
-    if (!philosophyScrollVideo) return;
-
-    const video = philosophyScrollVideo;
-    video.loop = false;
-    video.removeAttribute("loop");
-
-    function restartPhilosophyVideoLoop() {
-      philosophyVideoEndHoldActive = false;
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    }
-
-    function startPhilosophyEndHold() {
-      if (philosophyVideoEndHoldActive) return;
-      philosophyVideoEndHoldActive = true;
-
-      const duration = video.duration;
-      if (Number.isFinite(duration) && duration > 0) {
-        try {
-          video.currentTime = Math.max(0, duration - 0.042);
-        } catch (_) {
-          /* seek am Ende kann kurz fehlschlagen */
-        }
-      }
-
-      video.pause();
-      window.clearTimeout(philosophyVideoEndHoldTimer);
-      philosophyVideoEndHoldTimer = window.setTimeout(restartPhilosophyVideoLoop, PHILOSOPHY_VIDEO_END_HOLD_MS);
-    }
-
-    video.addEventListener("loadedmetadata", () => {
-      video.loop = false;
-    });
-
-    video.addEventListener("ended", startPhilosophyEndHold);
-
-    video.addEventListener(
-      "timeupdate",
-      () => {
-        if (philosophyVideoEndHoldActive || video.paused) return;
-        const duration = video.duration;
-        if (!Number.isFinite(duration) || duration <= 0.2) return;
-        if (video.currentTime >= duration - 0.1) {
-          startPhilosophyEndHold();
-        }
-      },
-      { passive: true }
-    );
-  }
 
   function initHeroParallax() {
     if (!hero || !heroParallax) return;
@@ -1587,7 +1532,6 @@
   }
 
   initEvolutionVideo();
-  initPhilosophyVideoEndHold();
   initHeroParallax();
   initAiSparkles();
   initKiVisualStack();

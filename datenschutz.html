@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datenschutz · sAIbot Impulse</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/logo-dark.png" type="image/png">
 </head>
@@ -83,28 +80,41 @@
         <a href="https://www.ionos.de/terms-gtc/datenschutzerklaerung/" target="_blank" rel="noopener noreferrer">Datenschutzhinweise IONOS</a>.
       </p>
 
-      <h2>3. Keine Analyse-Cookies (Stand Entwurf)</h2>
+      <h2>3. Cookie-Einwilligung &amp; Speicherung Ihrer Wahl</h2>
       <p>
-        Es sind keine klassischen Analyse- oder Marketing-Cookies eingebunden. Wenn Sie später
-        z. B. Google Analytics hinzufügen, muss diese Erklärung ergänzt werden.
+        Beim ersten Besuch erscheint ein Hinweis zu optionalen Diensten. Sie können
+        <strong>alle akzeptieren</strong> oder <strong>nur notwendige</strong> Dienste nutzen.
+        Ihre Entscheidung wird in <strong>localStorage</strong> unter dem Schlüssel
+        <code>saibot-cookie-consent-v1</code> gespeichert (technisch notwendig, um Ihre Wahl zu merken).
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. c DSGVO (Erfüllung rechtlicher Pflichten nach TTDSG) bzw.
+        lit. f DSGVO (berechtigtes Interesse an einer dokumentierten Einwilligung).
+        Sie können die Auswahl jederzeit über „Cookie-Einstellungen“ in der Fußzeile ändern.
+      </p>
+      <p>
+        Es werden <strong>keine Marketing- oder Tracking-Cookies</strong> von Drittanbietern wie Google Analytics gesetzt.
+        Werden später weitere Dienste eingebunden, wird diese Erklärung ergänzt.
       </p>
 
-      <h2>4. Schriftarten</h2>
+      <h2>4. Google Fonts (nur nach Einwilligung)</h2>
       <p>
-        Es werden Google Fonts geladen. Dabei kann eine Verbindung zu Servern von Google entstehen.
-        Wenn Sie maximale Datensparsamkeit wünschen, können die Schriftarten lokal eingebunden werden.
+        Wenn Sie „Alle akzeptieren“ wählen, werden Schriftarten von
+        <strong>Google Fonts</strong> nachgeladen. Dabei stellt Ihr Browser eine Verbindung zu Servern von Google her
+        (u. a. IP-Adresse). Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).
+        Wählen Sie „Nur notwendige“, werden System-Schriftarten genutzt; es findet kein Abruf bei Google statt.
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Datenschutzhinweise Google</a>.
       </p>
 
-      <h2>5. Besucherzähler in der Fußzeile (optional)</h2>
+      <h2>5. Besucherzähler (nur nach Einwilligung)</h2>
       <p>
-        Auf der Startseite kann ein <strong>aggregierter Aufrufzähler</strong> angezeigt werden. Technisch wird dafür
-        der Dienst <strong>CountAPI</strong> (Nachfolger unter
+        Auf der Startseite kann ein <strong>aggregierter Aufrufzähler</strong> angezeigt werden — nur wenn Sie
+        der Kategorie Statistik zugestimmt haben. Technisch wird der Dienst
+        <strong>CountAPI</strong> (
         <a href="https://countapi.mileshilliard.com/" target="_blank" rel="noopener noreferrer">countapi.mileshilliard.com</a>)
         genutzt: Beim ersten Aufruf pro Browser-Tab wird ein Zähler erhöht, die Gesamtzahl wird angezeigt.
-        Dabei wird eine Anfrage an Server des Anbieters gesendet (kein Cookie auf Ihrer Seite, aber Drittland-/Drittanbieter-Zugriff möglich).
-        Rechtsgrundlage wäre typischerweise Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer groben Reichweiten-Einschätzung)
-        — bitte mit Ihrer Datenschutzberatung abstimmen. Werden Adblocker genutzt oder ist der Dienst nicht erreichbar,
-        erscheint kein Wert („—“).
+        Dabei wird eine Anfrage an Server des Anbieters gesendet; auf dieser Website wird dafür
+        <strong>sessionStorage</strong> genutzt, damit pro Tab nur einmal gezählt wird.
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).
+        Ohne Einwilligung bleibt der Zähler deaktiviert („—“). Adblocker können die Anzeige ebenfalls verhindern.
       </p>
 
       <h2>6. Ihre Rechte</h2>
@@ -120,10 +130,39 @@
       <nav class="site-footer__legal" aria-label="Rechtliches">
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
+        <button type="button" class="site-footer__cookie-link" data-cookie-settings>Cookie-Einstellungen</button>
       </nav>
       <p class="site-footer__copy">© sAIbot Impulse</p>
     </div>
   </footer>
+  <div
+    class="cookie-banner"
+    id="cookie-banner"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-banner-title"
+    aria-describedby="cookie-banner-desc"
+    hidden
+  >
+    <div class="cookie-banner__panel">
+      <p class="cookie-banner__eyebrow">Einwilligung</p>
+      <h2 class="cookie-banner__title" id="cookie-banner-title">Cookies &amp; externe Dienste</h2>
+      <p class="cookie-banner__text" id="cookie-banner-desc">
+        Wir setzen nur Dienste ein, wenn Sie zustimmen — oder ausschließlich technisch Notwendiges, wenn Sie ablehnen.
+      </p>
+      <ul class="cookie-banner__list">
+        <li><strong>Notwendig:</strong> Speicherung Ihrer Auswahl (localStorage).</li>
+        <li><strong>Statistik (optional):</strong> aggregierter Seitenaufruf-Zähler (CountAPI).</li>
+        <li><strong>Externe Medien (optional):</strong> Google Fonts.</li>
+      </ul>
+      <div class="cookie-banner__actions">
+        <button type="button" class="btn btn--ghost" data-cookie-reject>Nur notwendige</button>
+        <button type="button" class="btn btn--primary" data-cookie-accept-all>Alle akzeptieren</button>
+      </div>
+      <p class="cookie-banner__legal"><a href="datenschutz.html">Datenschutzerklärung</a></p>
+    </div>
+  </div>
+  <script src="js/cookie-consent.js"></script>
   <script src="js/legal-nav.js"></script>
 </body>
 </html>

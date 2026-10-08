@@ -3,6 +3,17 @@
   const displayEl = document.getElementById("visitor-count");
   if (!cfg?.enabled || !displayEl) return;
 
+  function hasStatisticsConsent() {
+    return window.SAIBOT_CONSENT?.statistics === true;
+  }
+
+  function showConsentRequired() {
+    setDisplay(
+      "—",
+      "Besucherzähler nur mit Ihrer Einwilligung (Statistik). Bitte in den Cookie-Einstellungen aktivieren."
+    );
+  }
+
   function formatCount(n) {
     return new Intl.NumberFormat("de-DE").format(n);
   }
@@ -93,6 +104,10 @@
   }
 
   async function init() {
+    if (!hasStatisticsConsent()) {
+      showConsentRequired();
+      return;
+    }
     setDisplay("…", "Zähler wird geladen");
     try {
       if (cfg.endpoint) {
@@ -115,6 +130,11 @@
       );
     }
   }
+
+  window.addEventListener("saibot-consent-changed", () => {
+    if (hasStatisticsConsent()) init();
+    else showConsentRequired();
+  });
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
